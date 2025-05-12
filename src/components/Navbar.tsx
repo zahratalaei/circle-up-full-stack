@@ -3,6 +3,7 @@ import Image from 'next/image'
 import React from 'react'
 import Logo  from '../../public/Logo.png'
 import MobileMenu from './MobileMenu'
+import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 type Props = {}
 
 const Navbar = (props: Props) => {
@@ -40,6 +41,29 @@ const Navbar = (props: Props) => {
         </div>
         {/* right */}
         <div className='w-[30%] flex items-center gap-4 xl:gap-8 justify-end'>
+            <ClerkLoading>
+                <div className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-gray-500 border-solid border-current border-e-transparent align-[-0.125em] text-surface motion-reduce:animate-[spin_1.5s_linear_infinite] dark:text-white" />
+            </ClerkLoading>
+            <ClerkLoaded>
+                <SignedIn>
+                    <div className='cursor-pointer'>
+                        <Image src='/friends.png' width={20} height={20} alt=""/>
+                    </div>
+                    <div className='cursor-pointer'>
+                        <Image src='/messages.png' width={20} height={20} alt=""/>
+                    </div>
+                    <div className='cursor-pointer'>
+                        <Image src='/notifications.png' width={20} height={20} alt=""/>
+                    </div>
+                    <UserButton/>
+                </SignedIn>
+                <SignedOut>
+                    <div className='flex gap-2 items-center text-sm'>
+                    <Image src='/login.png' width={20} height={20} alt=""/>
+                    <Link href="/sign-in">Login/Register</Link>
+                    </div>
+                </SignedOut>
+            </ClerkLoaded>
             <MobileMenu/>
         </div>
     </div>
