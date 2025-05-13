@@ -14,15 +14,15 @@ const Navbar = (props: Props) => {
             <Link href="/">
                 <Image
                     src={Logo}
-                    width="70"
-                    height="70"
-                    className="d-inline-block"
+                    width={80}
+                    height={80}
+                    className="h-20 w-20 object-cover rounded-full"
                     alt="CircleUp logo"
                 />
             </Link>
         </div>
         {/* center */}
-        <div className='hidden md:flex w-[50%] text-sm'>
+        <div className='hidden md:flex w-[50%] text-sm items-center justify-between'>
             {/* list */}
             <div className='flex gap-6 text-gray-600'>
                 <Link href="/" className='flex gap-2 items-center justify-center'>
@@ -38,6 +38,11 @@ const Navbar = (props: Props) => {
                     <span>Stories</span>
                 </Link>
             </div>
+            {/* search bar */}
+            <div className='hidden xl:flex p-2 bg-slate-100 items-center rounded-xl'>
+                <input type="text" placeholder='Search...' className='bg-transparent outline-none' />
+                <Image src='/search.png' width={14} height={14} alt='search'className=''/>
+            </div>
         </div>
         {/* right */}
         <div className='w-[30%] flex items-center gap-4 xl:gap-8 justify-end'>
@@ -47,7 +52,7 @@ const Navbar = (props: Props) => {
             <ClerkLoaded>
                 <SignedIn>
                     <div className='cursor-pointer'>
-                        <Image src='/friends.png' width={20} height={20} alt=""/>
+                        <Image src='/friends.png' width={24} height={24} alt=""/>
                     </div>
                     <div className='cursor-pointer'>
                         <Image src='/messages.png' width={20} height={20} alt=""/>
