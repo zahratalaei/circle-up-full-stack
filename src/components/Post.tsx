@@ -52,8 +52,8 @@ const Post = (props: Props) => {
               height={16}
               className="cursor-pointer"
             />
-            <span className="text-grey-300">|</span>
-            <span className="text-grey-500">
+            <span className="text-gray-300">|</span>
+            <span className="text-gray-500">
               123 <span className="hidden md:inline"> Likes</span>{" "}
             </span>
           </div>
@@ -65,8 +65,8 @@ const Post = (props: Props) => {
               height={16}
               className="cursor-pointer"
             />
-            <span className="text-grey-300">|</span>
-            <span className="text-grey-500">
+            <span className="text-gray-300">|</span>
+            <span className="text-gray-500">
               123 <span className="hidden md:inline"> Comments</span>{" "}
             </span>
           </div>
@@ -80,8 +80,8 @@ const Post = (props: Props) => {
               height={16}
               className="cursor-pointer"
             />
-            <span className="text-grey-300">|</span>
-            <span className="text-grey-500">
+            <span className="text-gray-300">|</span>
+            <span className="text-gray-500">
               123 <span className="hidden md:inline"> Shares</span>{" "}
             </span>
           </div>

@@ -8,7 +8,7 @@ const Birthday = (props: Props) => {
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             <div>
                 <div className='flex items-center justify-between mb-4 font-medium'>
-                    <span className='text-grey-500'>Birthdays</span>
+                    <span className='text-gray-500'>Birthdays</span>
                     <Link href="/" className='text-blue-500 text-xs'>See all</Link>
                 </div>
             </div>
@@ -27,8 +27,8 @@ const Birthday = (props: Props) => {
             <div className='flex items-center bg-slate-100 gap-4 p-4 rounded-lg'>
                 <Image src="/gift.png" alt='' width={24} height={24}/>
                 <Link href="/" className='flex flex-col text-xs gap-1'>
-                    <span className='text-grey-700 font-semibold'>Upcoming Birthdays</span>
-                    <span className='text-grey-500'>See other 16 have upcoming birthdays</span>
+                    <span className='text-gray-700 font-semibold'>Upcoming Birthdays</span>
+                    <span className='text-gray-500'>See other 16 have upcoming birthdays</span>
                 </Link>
             </div>
 

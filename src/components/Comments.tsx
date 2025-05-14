@@ -33,8 +33,8 @@ const Comments = (props: Props) => {
                         <div className='flex items-center gap-8 text-xs'>
                             <div className='flex items-center gap-4 bg-slate-50 p-2 rounded-xl'>
                                 <Image src="/like.png" alt="" width={12} height={12} className="w-4 h-4 cursor-pointer" />
-                                <span className='text-grey-300'>|</span>
-                                <span className='text-grey-500'>12 Likes</span>
+                                <span className='text-gray-300'>|</span>
+                                <span className='text-gray-500'>12 Likes</span>
                             </div>
                             <div>Reply</div>
                         </div>

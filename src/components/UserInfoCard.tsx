@@ -9,11 +9,11 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             {/* Top */}
             <div className='flex items-center justify-between mb-4 font-medium'>
-                <span className='text-grey-500'>User Information</span>
+                <span className='text-gray-500'>User Information</span>
                 <Link href="/" className='text-blue-500 text-xs'>See all</Link>
             </div>
             {/* Bottom */}
-            <div className="flex flex-col gap-4 text-grey-300">
+            <div className="flex flex-col gap-4 text-gray-300">
                 <div className="flex items-center gap-2">
                     <span className='text-xl text-black'>Zahra Talaei</span>
                     <span className='text-sm'>@zahra</span>
