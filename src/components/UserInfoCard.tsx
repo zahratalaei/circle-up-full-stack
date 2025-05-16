@@ -10,10 +10,10 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
             {/* Top */}
             <div className='flex items-center justify-between mb-4 font-medium'>
                 <span className='text-gray-500'>User Information</span>
-                <Link href="/" className='text-blue-500 text-xs'>See all</Link>
+                <Link href="/" className='text-accent text-xs'>See all</Link>
             </div>
             {/* Bottom */}
-            <div className="flex flex-col gap-4 text-gray-300">
+            <div className="flex flex-col gap-4 text-yellow-800">
                 <div className="flex items-center gap-2">
                     <span className='text-xl text-black'>Zahra Talaei</span>
                     <span className='text-sm'>@zahra</span>
@@ -34,14 +34,14 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
                 <div className='flex items-center justify-between'>
                     <div className="flex items-center gap-1">
                         <Image src="/link.png" alt="" width={16} height={16} />
-                        <Link href="https://zahratalaei.github.io/portfolio/" className='text-sm text-blue-500'>Zahra's Portfolio </Link>
+                        <Link href="https://zahratalaei.github.io/portfolio/" className='text-sm text-yellow-700'>Zahra's Portfolio </Link>
                     </div>
                     <div className="flex items-center gap-1">
                         <Image src="/date.png" alt="" width={16} height={16} className="w-4 h-4 cursor-pointer" />
                         <span className='text-xs'>Joined May 2025</span>
                     </div>
                 </div>
-                <button className='bg-blue-500 rounded-md py-2 text-white text-sm'>Following</button>
+                <button className='bg-primary rounded-lg py-2 text-white text-sm'>Following</button>
                 <span className="text-red-400 self-end text-xs cursor-pointer">Block User</span>
 
             </div>

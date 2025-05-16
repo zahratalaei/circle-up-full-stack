@@ -3,7 +3,10 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { ClerkProvider } from "@clerk/nextjs";
 
+import { Inter, Playfair_Display } from 'next/font/google';
 
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
+const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-heading' });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,12 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-    <html lang="en">
-      <body>
-        <div className="w-full bg-white px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
+      <body className="bg-muted text-foreground font-sans">
+        <div className="w-full bg-background px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
           <Navbar/>
         </div>
-        <div className=" bg-slate-100 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+        <div className="bg-muted px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
           {children}
         </div>
       </body>

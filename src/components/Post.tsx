@@ -50,7 +50,7 @@ const Post = (props: Props) => {
               alt=""
               width={16}
               height={16}
-              className="cursor-pointer"
+              className="cursor-pointer icon-primary"
             />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
@@ -63,7 +63,7 @@ const Post = (props: Props) => {
               alt=""
               width={16}
               height={16}
-              className="cursor-pointer"
+              className="cursor-pointer icon-primary"
             />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
@@ -78,7 +78,7 @@ const Post = (props: Props) => {
               alt=""
               width={16}
               height={16}
-              className="cursor-pointer"
+              className="cursor-pointer icon-primary"
             />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">

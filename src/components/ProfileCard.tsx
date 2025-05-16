@@ -22,7 +22,7 @@ const ProfileCard = (props: Props) => {
                     <span className='text-gray-500 text-xs'>500 followers</span>
                 </div>
                 <Link href="/profile/123">
-                    <button className='bg-blue-500 text-white p-2 rounded-md text-xs'>My Profile</button>
+                    <button className='bg-primary text-white px-2 py-1 rounded-lg text-xs'>My Profile</button>
                 </Link>
             </div>
         </div>

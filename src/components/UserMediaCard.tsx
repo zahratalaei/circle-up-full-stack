@@ -10,7 +10,7 @@ const UserMediaCard = ({userId}: {userId: string}) => {
         {/* Top */}
         <div className='flex items-center justify-between mb-4 font-medium'>
             <span className='text-gray-500'>User Media</span>
-            <Link href="/" className='text-blue-500 text-xs'>See all</Link>
+            <Link href="/" className='text-accent text-xs'>See all</Link>
         </div>
         {/* Bottom */}
         <div className='flex flex-wrap justify-start gap-4'>

@@ -11,70 +11,56 @@ const LeftMenu = ({type}:{type:"home" | "profile"}) => {
     <div className='flex flex-col gap-6'>
       {type === "home" && <ProfileCard/>}
       <div className="bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4 p-4 text-gray-500">
-        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-slate-100'>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/posts.png" alt="" width={20} height={20} />
           <span>My Posts</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
-        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-slate-100'>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/activity.png" alt="" width={20} height={20} />
           <span>Activity</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
-        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-slate-100'>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/market.png" alt="" width={20} height={20} />
           <span>MarketPlace</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
-        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-slate-100'>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/events.png" alt="" width={20} height={20} />
           <span>Events</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
-        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-slate-100'>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/albums.png" alt="" width={20} height={20} />
           <span>Albums</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
-        <Link
-          href="/"
-          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100"
-        >
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/videos.png" alt="" width={20} height={20} />
           <span>Videos</span>
         </Link>
-        <hr className="border-t-1 border-gray-50 w-36 self-center" />
-        <Link
-          href="/"
-          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100"
-        >
+        <hr className='border-t-1 border-gray-50 w-36 self-center'/>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/news.png" alt="" width={20} height={20} />
           <span>News</span>
         </Link>
-        <hr className="border-t-1 border-gray-50 w-36 self-center" />
-        <Link
-          href="/"
-          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100"
-        >
+        <hr className='border-t-1 border-gray-50 w-36 self-center'/>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/courses.png" alt="" width={20} height={20} />
           <span>Courses</span>
         </Link>
-        <hr className="border-t-1 border-gray-50 w-36 self-center" />
-        <Link
-          href="/"
-          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100"
-        >
+        <hr className='border-t-1 border-gray-50 w-36 self-center'/>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/lists.png" alt="" width={20} height={20} />
           <span>Lists</span>
         </Link>
-        <hr className="border-t-1 border-gray-50 w-36 self-center" />
-        <Link
-          href="/"
-          className="flex items-center gap-4 p-2 rounded-lg hover:bg-slate-100"
-        >
+        <hr className='border-t-1 border-gray-50 w-36 self-center'/>
+        <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
           <Image src="/settings.png" alt="" width={20} height={20} />
           <span>Settings</span>
         </Link>
+        
       </div>
       <Ad size="sm" />
     </div>
