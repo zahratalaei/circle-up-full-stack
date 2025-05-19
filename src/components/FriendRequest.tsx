@@ -9,7 +9,7 @@ const FriendRequest = (props: Props) => {
     <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
         {/* Top */}
         <div className='flex items-center justify-between mb-4 font-medium'>
-            <span className='text-gray-500'>Friend Request</span>
+            <span className='text-yellow-950 font-serif'>Friend Request</span>
             <Link href="/" className='text-accent text-xs'>See all</Link>
         </div>
         {/* Bottom */}

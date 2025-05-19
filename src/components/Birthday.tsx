@@ -8,7 +8,7 @@ const Birthday = (props: Props) => {
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             <div>
                 <div className='flex items-center justify-between mb-4 font-medium'>
-                    <span className='text-gray-500'>Birthdays</span>
+                    <span className='text-brown-950 font-serif'>Birthdays</span>
                     <Link href="/" className='text-accent text-xs'>See all</Link>
                 </div>
             </div>

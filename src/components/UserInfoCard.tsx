@@ -9,7 +9,7 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             {/* Top */}
             <div className='flex items-center justify-between mb-4 font-medium'>
-                <span className='text-gray-500'>User Information</span>
+                <span className='text-yellow-950 font-serif'>User Information</span>
                 <Link href="/" className='text-accent text-xs'>See all</Link>
             </div>
             {/* Bottom */}
@@ -42,7 +42,7 @@ const UserInfoCard = ({ userId }: { userId: string }) => {
                     </div>
                 </div>
                 <button className='bg-primary rounded-lg py-2 text-white text-sm'>Following</button>
-                <span className="text-red-400 self-end text-xs cursor-pointer">Block User</span>
+                <span className="text-error self-end text-xs cursor-pointer">Block User</span>
 
             </div>
 

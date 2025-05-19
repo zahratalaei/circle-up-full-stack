@@ -8,7 +8,7 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             <div className='flex items-center justify-between mb-4 font-medium'>
-                <span className='text-gray-900 font-serif'>Sponsored Ads</span>
+                <span className='text-yellow-950 font-serif'>Sponsored Ads</span>
                 <Image src="/more.png" alt="" width={16} height={16} className="w-4 h-4 cursor-pointer" />
             </div>
             <div className={`flex flex-col  text-gray-500 ${size === "sm" ? "gap-2" : size === "md" ? "gap-4" : "gap-6"}`}>
