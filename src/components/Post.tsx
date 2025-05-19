@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import Comments from "./Comments";
+import { MessageCircleMore, Share2, ThumbsUp } from "lucide-react";
 
 type Props = {};
 
@@ -43,7 +44,7 @@ const Post = (props: Props) => {
       {/* Interaction */}
       {/* <div className="flex items-center justify-between text-sm my-4"> */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between text-sm my-4 space-y-2 md:space-y-0 my-4">
-        <div className="flex gap-8">
+        <div className="flex gap-8 text-yellow-700">
           <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
             <Image
               src="/like.png"
@@ -52,6 +53,7 @@ const Post = (props: Props) => {
               height={16}
               className="cursor-pointer icon-primary"
             />
+            {/* <ThumbsUp  size={16} className="cursor-pointer icon-primary" /> */}
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
               123 <span className="hidden md:inline"> Likes</span>{" "}
@@ -65,21 +67,23 @@ const Post = (props: Props) => {
               height={16}
               className="cursor-pointer icon-primary"
             />
+            {/* <MessageCircleMore  size={16} className="cursor-pointer icon-primary bg-muted" /> */}
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
               123 <span className="hidden md:inline"> Comments</span>{" "}
             </span>
           </div>
         </div>
-        <div>
+        <div className="text-yellow-700">
           <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
-            <Image
+            {/* <Image
               src="/share.png"
               alt=""
               width={16}
               height={16}
               className="cursor-pointer icon-primary"
-            />
+            /> */}
+            <Share2 size={16} className="cursor-pointer icon-primary" />
             <span className="text-gray-300">|</span>
             <span className="text-gray-500">
               123 <span className="hidden md:inline"> Shares</span>{" "}

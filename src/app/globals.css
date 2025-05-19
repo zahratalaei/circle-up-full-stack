@@ -58,9 +58,21 @@ body {
   scrollbar-width: none; /* Firefox */
 }
 
-.icon-primary {
-  @apply filter grayscale brightness-200 sepia saturate-[500%] hue-rotate-[40deg] brightness-[1.1] contrast-[1.2];
-}
-.icon-primary {
-  @apply filter grayscale brightness-0 sepia saturate-[500%] hue-rotate-[40deg] brightness-[1.1] contrast-125;
+/* ─── Components Layer ─────────────────────────────────── */
+@layer components {
+  .icon-primary {
+    @apply filter grayscale brightness-200 sepia saturate-[500%]
+           hue-rotate-[40deg] brightness-[1.1] contrast-[1.2];
+  }
+
+  .icon-secondary {
+    @apply inline-flex items-center justify-center
+           w-6 h-6 bg-secondary text-primary rounded-full;
+  }
+
+  /* If you need the filled variant: */
+  .icon-secondary.icon-filled svg path {
+    stroke: none;
+    fill: currentColor;
+  }
 }

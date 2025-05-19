@@ -3,7 +3,7 @@ import ProfileCard from './ProfileCard'
 import Image from 'next/image'
 import Link from 'next/link'
 import Ad from './Ad'
-import { SquarePen, Bike, Store, CalendarRange, Images, FileVideo, Newspaper, LibraryBig } from 'lucide-react';
+import { SquarePen, Bike, Store, CalendarRange, Images, FileVideo, Newspaper, LibraryBig, List, Settings } from 'lucide-react';
 
 
 type Props = {}
@@ -62,12 +62,14 @@ const LeftMenu = ({type}:{type:"home" | "profile"}) => {
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
         <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
-          <Image src="/lists.png" alt="" width={20} height={20} />
+          {/* <Image src="/lists.png" alt="" width={20} height={20} /> */}
+          <List size={20} className=''/>
           <span>Lists</span>
         </Link>
         <hr className='border-t-1 border-gray-50 w-36 self-center'/>
         <Link href="/" className='flex items-center gap-4 rounded-lg hover:bg-muted'>
-          <Image src="/settings.png" alt="" width={20} height={20} />
+          {/* <Image src="/settings.png" alt="" width={20} height={20} /> */}
+          <Settings size={20} className=''/>
           <span>Settings</span>
         </Link>
         
