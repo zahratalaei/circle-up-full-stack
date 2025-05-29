@@ -20,9 +20,11 @@ const ProfileCard = async (props: Props) => {
                 }
         }}
     })
+    console.log("ProfileCard user:", user); // Debug the user data
     if(!user) return null
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-6'>
+           
             <div className='h-20 relative'>
                 <Image src={user.cover || '/noCover.png' } alt="" fill className='object-cover rounded-md' />
                 <Image src={user.avatar || '/noAvatar.png' } alt="" width={48} height={48} className='absolute right-0 left-0 m-auto -bottom-6 w-12 h-12 object-cover rounded-full border-2 border-white shadow-md ring-1 ring-white z-10' />

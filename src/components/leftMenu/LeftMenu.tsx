@@ -1,14 +1,15 @@
-import React from 'react'
-import ProfileCard from './ProfileCard'
-import Image from 'next/image'
+
 import Link from 'next/link'
-import Ad from './Ad'
+import Ad from '../Ad'
 import { SquarePen, Bike, Store, CalendarRange, Images, FileVideo, Newspaper, LibraryBig, List, Settings } from 'lucide-react';
+import ProfileCard from './ProfileCard';
 
 
 type Props = {}
 
 const LeftMenu = ({type}:{type:"home" | "profile"}) => {
+      console.log("LeftMenu type:", type); // Debug the type prop
+
   return (
     <div className='flex flex-col gap-6'>
       {type === "home" && <ProfileCard/>}

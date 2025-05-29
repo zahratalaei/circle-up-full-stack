@@ -14,6 +14,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum RelationStatus {
+  NONE // no relationship  
+  REQUESTED // I’ve sent you a follow request  
+  FOLLOWING // I’m following you  
+  BLOCKED // either I’ve blocked you, or you’ve blocked me  
+}
+
 model User {
   id          String          @id @default(cuid())
   username    String?         @unique
@@ -40,6 +47,8 @@ model User {
   blocks      Block[]         @relation("Blocker")
   blockedBy   Block[]         @relation("Blocked")
   stories     Story[]
+  relations   Relationship[]  @relation("relations_from")
+  relatedBy   Relationship[]  @relation("relations_to")
 }
 
 model Post {
@@ -79,6 +88,20 @@ model Comment {
   likes     Like[]
 }
 
+model Relationship {
+  id     String @id @default(cuid())
+  from   User   @relation("relations_from", fields: [fromId], references: [id], onDelete: Cascade)
+  fromId String
+  to     User   @relation("relations_to", fields: [toId], references: [id], onDelete: Cascade)
+  toId   String
+
+  status    RelationStatus @default(NONE)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@unique([fromId, toId])
+}
+
 model Follower {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
@@ -87,6 +110,8 @@ model Follower {
   followerId  String?
   following   User?    @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
   followingId String?
+
+  @@unique([followerId, followingId])
 }
 
 model FollowRequest {

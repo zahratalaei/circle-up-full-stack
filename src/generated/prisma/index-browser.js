@@ -166,6 +166,15 @@ exports.Prisma.CommentScalarFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.RelationshipScalarFieldEnum = {
+  id: 'id',
+  fromId: 'fromId',
+  toId: 'toId',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.FollowerScalarFieldEnum = {
   id: 'id',
   createdAt: 'createdAt',
@@ -242,6 +251,12 @@ exports.Prisma.CommentOrderByRelevanceFieldEnum = {
   userId: 'userId'
 };
 
+exports.Prisma.RelationshipOrderByRelevanceFieldEnum = {
+  id: 'id',
+  fromId: 'fromId',
+  toId: 'toId'
+};
+
 exports.Prisma.FollowerOrderByRelevanceFieldEnum = {
   followerId: 'followerId',
   followingId: 'followingId'
@@ -263,13 +278,19 @@ exports.Prisma.StoryOrderByRelevanceFieldEnum = {
   image: 'image',
   authorId: 'authorId'
 };
-
+exports.RelationStatus = exports.$Enums.RelationStatus = {
+  NONE: 'NONE',
+  REQUESTED: 'REQUESTED',
+  FOLLOWING: 'FOLLOWING',
+  BLOCKED: 'BLOCKED'
+};
 
 exports.Prisma.ModelName = {
   User: 'User',
   Post: 'Post',
   Like: 'Like',
   Comment: 'Comment',
+  Relationship: 'Relationship',
   Follower: 'Follower',
   FollowRequest: 'FollowRequest',
   Block: 'Block',

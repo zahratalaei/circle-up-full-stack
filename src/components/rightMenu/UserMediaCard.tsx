@@ -1,10 +1,11 @@
+import { User } from '@/generated/prisma'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
 type Props = {}
 
-const UserMediaCard = ({userId}: {userId: string}) => {
+const UserMediaCard = ({user}: {user: User}) => {
   return (
     <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
         {/* Top */}
