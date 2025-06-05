@@ -1,6 +1,6 @@
 import { User } from '@/generated/prisma'
 import prisma from '@/lib/client'
-import { auth } from '@clerk/nextjs/server'
+import { auth, currentUser } from '@clerk/nextjs/server'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { Suspense } from 'react'
@@ -17,7 +17,9 @@ const UserInfoCard = async ({ user }: { user: User }) => {
         // day: 'numeric',
     })
 
-    const { userId: currentUserId } = await auth()
+    const {userId: currentUserId } = await auth()
+    const currentUser1 =  await currentUser()
+    const school = currentUser1?.publicMetadata?.school
     if (!currentUserId) { throw new Error("User not authenticated") }
     const relationStatus = await getRelationStatus(user.id, currentUserId)
 
@@ -54,7 +56,7 @@ const UserInfoCard = async ({ user }: { user: User }) => {
                     </div>}
                     <div className="flex items-center gap-1">
                         <Image src="/date.png" alt="" width={16} height={16} className="w-4 h-4 cursor-pointer" />
-                        <span className='text-xs'>{formattedDate}</span>
+                        <span className='text-xs'>Joined {formattedDate}</span>
                     </div>
                 </div>
                 {currentUserId && currentUserId !== user.id &&

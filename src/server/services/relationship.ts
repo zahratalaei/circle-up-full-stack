@@ -2,12 +2,14 @@ import prisma from "@/lib/client";
 
 
 
-export type RelationStatus =
+export type FollowStatus =
   | "None"
   | "Requested"
   | "Following"
+  
+export type BlockStatus =
   | "Blocked"
-  |"BlockedBy"
+  | "BlockedBy";
 
 export type RelationAction =
   | "follow"
@@ -17,38 +19,34 @@ export type RelationAction =
   | "block"
   | "unblock";
   export interface RelationData {
-  status: RelationStatus;     // follow/request status
-  blockedByMe: boolean;       // I have blocked them
-  blockedByThem: boolean;     // they have blocked me
+  status: FollowStatus;     // follow/request status
+  blocked: boolean;       // I have blocked them
+  blockedBy: boolean;     // they have blocked me
 }
-export const getRelationStatus = async (userId: string, currentUserId:string):Promise<RelationStatus>=>{
+export const getRelationStatus = async (userId: string, currentUserId:string):Promise<RelationData>=>{
     // const {userId: currentUserId} = await auth()
     // if (!currentUserId) {throw new Error("User not authenticated")}
-    // Block takes highest priority
-    // Have I been blocked?
-  const blockedBy = await prisma.block.findUnique({
-    where: { blockedId_blockerId: { blockedId: currentUserId, blockerId: userId } }
-  });
-  if (blockedBy) return "BlockedBy";
-    // Have I blocked?
-    const blocked = await prisma.block.findUnique({
-        where: { blockedId_blockerId: { blockerId: userId, blockedId: currentUserId } }
-    });
-    if (blocked) return "Blocked";
-  // Check if already following
-  const follow = await prisma.follower.findUnique({
-    where: { followerId_followingId: { followerId: currentUserId, followingId: userId } }
-  })
-  if (follow) return "Following";
-
-  // Check if a follow‐request exists
-  const req = await prisma.followRequest.findUnique({
-    where: { senderId_receiverId: { senderId: currentUserId, receiverId: userId } }
-  });
-  if (req) return "Requested";
-
-  // Otherwise
-  return "None";
+    /** run all four look-ups in parallel */
+  const [blockedBy, blocked, follow, request] = await Promise.all([
+    prisma.block.findUnique({
+      where: { blockedId_blockerId: { blockedId: currentUserId, blockerId: userId } },
+      select: { id: true },
+    }),
+    prisma.block.findUnique({
+      where: { blockedId_blockerId: { blockedId: userId, blockerId: currentUserId } },
+      select: { id: true },
+    }),
+    prisma.follower.findUnique({
+      where: { followerId_followingId: { followerId: currentUserId, followingId: userId } },
+      select: { id: true },
+    }),
+    prisma.followRequest.findUnique({
+      where: { senderId_receiverId: { senderId: currentUserId, receiverId: userId } },
+      select: { id: true },
+    }),
+  ]);
+  const status:FollowStatus = follow ? "Following" : request ? "Requested" : "None";
+  return {status, blocked: !!blocked, blockedBy: !!blockedBy};
 }
 
 //perform action on relation

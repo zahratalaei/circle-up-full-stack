@@ -8,7 +8,6 @@ import ProfileCard from './ProfileCard';
 type Props = {}
 
 const LeftMenu = ({type}:{type:"home" | "profile"}) => {
-      console.log("LeftMenu type:", type); // Debug the type prop
 
   return (
     <div className='flex flex-col gap-6'>

@@ -28,20 +28,20 @@ const ProfilePage = async ({params}: {params:{username:string} }) => {
     }
   })
   if(!user) return notFound()
-  const { userId:currentUserId } = await auth()
-let isBlocked;
-  if(currentUserId){
-    const res= await prisma.block.findFirst({
-      where:{
-        blockerId: user.id,
-        blockedId: currentUserId
-      }
-    })
-    if (res) isBlocked =true;
-  }else{
-    isBlocked = false;
-  }
-  if(isBlocked) return notFound()
+//   const { userId:currentUserId } = await auth()
+// let isBlocked;
+//   if(currentUserId){
+//     const res= await prisma.block.findFirst({
+//       where:{
+//         blockerId: user.id,
+//         blockedId: currentUserId
+//       }
+//     })
+//     if (res) isBlocked =true;
+//   }else{
+//     isBlocked = false;
+//   }
+//   if(isBlocked) return notFound()
   return (
     <div className="flex g-6 p-6">
       <div className="hidden xl:block w-[20%]">

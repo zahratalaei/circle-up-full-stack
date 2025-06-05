@@ -1,67 +1,83 @@
 "use client";
-import { useOptimistic } from "react";
+import { FollowStatus, RelationAction, RelationData } from "@/server/services/relationship";
+import { useOptimistic, useState, useTransition } from "react";
 
 type Props = {
     userId: string;
-    initialStatus: RelationStatus
+    initialStatus: RelationData
 }
-type RelationStatus = "None" | "Requested" | "Following" | "Blocked" | "BlockedBy";
-type RelationAction = "follow" | "cancel" | "accept" | "unfollow" | "block" | "unblock";
-const labelMap: Record<RelationStatus, string> = {
+
+
+const labelMap: Record<FollowStatus, string> = {
     None: "Follow",
-    Requested: "Requested",
+    Requested: "Friend Request Sent",
     Following: "Following",
-    Blocked: "Blocked",
-    BlockedBy: "You are blocked"
 };
-const actionMap: Record<RelationStatus, { action: RelationAction, next: RelationStatus } | null> = {
+const actionMap: Record<FollowStatus, { action: RelationAction, next: FollowStatus } | null> = {
     None: { action: "follow", next: "Requested" },
     Requested: { action: "cancel", next: "None" },
     Following: { action: "unfollow", next: "None" },
-    Blocked: null,
-    BlockedBy: null
-}
 
+}
 const UserInfoCardInteraction = (props: Props) => {
     const { userId, initialStatus } = props;
-    const [status, updateStatus] = useOptimistic<RelationStatus>(initialStatus);
-    const handle = async (action: RelationAction, next: RelationStatus) => {
-        updateStatus(next);
+    // const { status, blockedByMe, blockedByThem } = initialStatus;
+    console.log("initialStatus", initialStatus)
+    const [state, setState] = useState<RelationData>(initialStatus);
+    const [optStatus, updateOptStatus] = useOptimistic<
+        RelationData,
+        Partial<RelationData>
+    >(state, (prev, next) => ({ ...prev, ...next }))
+    const mutate = async (action: RelationAction, next: Partial<RelationData>) => {
+        updateOptStatus(next)
         try {
             await fetch(`/api/users/${userId}/relationship`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ action }),
             });
+            setState(s => ({ ...s, ...next }))
         } catch (error) {
             console.error("Error performing action:", error);
-            // Rollback to previous status if the action fails
-            updateStatus(status);
+            // // Rollback to previous status if the action fails
+            // updateOptStatus(status);
         }
     }
-    const handleBlockStatus = async () => {
-        if (status === "BlockedBy") return;
-        const isBlocked = status === "Blocked";
-        const action: RelationAction = isBlocked ? "unblock" : "block";
-        const nextStatus: RelationStatus = isBlocked ? "None" : "Blocked";
-        await handle(action, nextStatus);
+    const followAction = async () => {
+        const actionEntry = actionMap[state.status];
+        if (!actionEntry) return;
+
+        await mutate(actionEntry.action, { status: actionEntry.next });
     }
-    if (status === "BlockedBy") {
-        return (
-            <span className="text-error text-xs">You are blocked by this user</span>
-        )
+
+    const blockAction = async () => {
+        if (state.blockedBy) return;          // cannot override their block
+        await mutate(state.blocked ? "unblock" : "block", {
+            blocked: !state.blocked,
+        });
     }
-    const actionEntry = actionMap[status];
+    // if (optStatus.blockedBy) {
+    //     return <span className="text-error text-xs">You are blocked</span>;
+    // }
     return (
-        <>
-            <button
-                onClick={() => actionEntry && handle(actionEntry.action, actionEntry.next)}
-                disabled={status === "Blocked"}
-                className='bg-primary rounded-lg py-2 text-white text-sm'>{labelMap[status]}</button>
-
-
-            <span onClick={handleBlockStatus} className="text-error self-end text-xs cursor-pointer">{status === "Blocked" ? "Unblock" : "Block"}</span>
-        </>
+        <div className="flex flex-col pt-2">
+            <div className="w-full flex justify-center ">
+                <form action={followAction} className="w-full">
+                    <button
+                        disabled={optStatus.blockedBy}
+                        className='bg-primary rounded-xl w-full mb-2 py-2 text-white text-sm hover:bg-yellow-600'>
+                        {optStatus.blockedBy ? "You are Blocked" : labelMap[optStatus.status]}
+                    </button>
+                </form>
+            </div>
+            <div className="flex justify-end">
+                <form action={blockAction}>
+                    <button className="text-error text-xs cursor-pointer">
+                        {optStatus.blocked ? "Unblock" : "Block"} User
+                    </button>
+                </form>
+            </div>
+        </div>
     )
 }
 
