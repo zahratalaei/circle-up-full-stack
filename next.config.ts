@@ -2,8 +2,44 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  images: {
-    domains: ["images.pexels.com", "images.unsplash.com", "cdn.pixabay.com", "i.pinimg.com", "cdn.pixabay.com", "images.clerk.dev", "www.gravatar.com"],
+   images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.pixabay.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.pinimg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.clerk.dev",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.gravatar.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+    ],
   },
 };
 

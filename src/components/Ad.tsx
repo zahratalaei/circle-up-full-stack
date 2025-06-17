@@ -22,10 +22,10 @@ const Ad = ({ size }: { size: "sm" | "md" | "lg" }) => {
                 <p className={size=="sm" ? "text-xs text-yellow-700" : "text-sm text-yellow-700" }>
                     {size === "sm" ? "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus." : size === "md" ? "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus." : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, voluptatibus."}
                 </p>
-                <button className="bg-secondary text-gray-600 p-2 text-xs rounded-lg">Learn more</button>
+                <button className="bg-secondary text-gray-600 p-2 text-xs rounded-lg cursor-pointer hover:bg-primary hover:text-gray-800">Learn more</button>
             </div>
         </div>
     )
-}
+} 
 
 export default Ad

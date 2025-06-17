@@ -28,20 +28,6 @@ const ProfilePage = async ({params}: {params:{username:string} }) => {
     }
   })
   if(!user) return notFound()
-//   const { userId:currentUserId } = await auth()
-// let isBlocked;
-//   if(currentUserId){
-//     const res= await prisma.block.findFirst({
-//       where:{
-//         blockerId: user.id,
-//         blockedId: currentUserId
-//       }
-//     })
-//     if (res) isBlocked =true;
-//   }else{
-//     isBlocked = false;
-//   }
-//   if(isBlocked) return notFound()
   return (
     <div className="flex g-6 p-6">
       <div className="hidden xl:block w-[20%]">
@@ -61,11 +47,11 @@ const ProfilePage = async ({params}: {params:{username:string} }) => {
                 <span className='text-sm'>Posts</span>
               </div>
               <div className='flex flex-col items-center'>
-                <span className='font-medium'>{user?._count.posts}</span>
+                <span className='font-medium'>{user?._count.followers}</span>
                 <span className='text-sm'>Followers</span>
               </div>
               <div className='flex flex-col items-center'>
-                <span className='font-medium'>{user?._count.posts}</span>
+                <span className='font-medium'>{user?._count.following}</span>
                 <span className='text-sm'>Following</span>
               </div>
             </div>

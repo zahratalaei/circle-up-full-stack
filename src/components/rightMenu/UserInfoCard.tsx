@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React, { Suspense } from 'react'
 import UserInfoCardInteraction from './UserInfoCardInteraction'
 import { getRelationStatus } from '@/server/services/relationship'
+import UpdateUser from './UpdateUser'
 
 type Props = {}
 
@@ -18,8 +19,6 @@ const UserInfoCard = async ({ user }: { user: User }) => {
     })
 
     const {userId: currentUserId } = await auth()
-    const currentUser1 =  await currentUser()
-    const school = currentUser1?.publicMetadata?.school
     if (!currentUserId) { throw new Error("User not authenticated") }
     const relationStatus = await getRelationStatus(user.id, currentUserId)
 
@@ -28,7 +27,8 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             {/* Top */}
             <div className='flex items-center justify-between mb-4 font-medium'>
                 <span className='text-yellow-950 font-serif'>User Information</span>
-                <Link href="/" className='text-accent text-xs'>See all</Link>
+                {currentUserId === user.id ? <UpdateUser user={user} /> : <Link href="/" className='text-accent text-xs'>See all</Link>}
+                {/* <Link href="/" className='text-accent text-xs'>See all</Link> */}
             </div>
             {/* Bottom */}
             <div className="flex flex-col gap-4 text-yellow-800">

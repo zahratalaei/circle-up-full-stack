@@ -3,7 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 type Props = {}
 
-const Birthday = (props: Props) => {
+
+const Birthday = async (props: Props) => {
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
             <div>
@@ -20,7 +21,7 @@ const Birthday = (props: Props) => {
                         <span className='font-semibold'>User 22</span>
                     </div>
                     <div className='flex items-center gap-3 justify-end'>
-                        <button className='bg-primary text-white text-xs px-2 py-1 rounded-lg'>Celebrate</button>
+                        <button className='bg-primary text-white text-xs px-2 py-1 rounded-lg hover:bg-yellow-600'>Celebrate</button>
                     </div>
                 </div>
             </div>

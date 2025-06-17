@@ -22,7 +22,6 @@ const actionMap: Record<FollowStatus, { action: RelationAction, next: FollowStat
 const UserInfoCardInteraction = (props: Props) => {
     const { userId, initialStatus } = props;
     // const { status, blockedByMe, blockedByThem } = initialStatus;
-    console.log("initialStatus", initialStatus)
     const [state, setState] = useState<RelationData>(initialStatus);
     const [optStatus, updateOptStatus] = useOptimistic<
         RelationData,
@@ -56,9 +55,7 @@ const UserInfoCardInteraction = (props: Props) => {
             blocked: !state.blocked,
         });
     }
-    // if (optStatus.blockedBy) {
-    //     return <span className="text-error text-xs">You are blocked</span>;
-    // }
+
     return (
         <div className="flex flex-col pt-2">
             <div className="w-full flex justify-center ">
