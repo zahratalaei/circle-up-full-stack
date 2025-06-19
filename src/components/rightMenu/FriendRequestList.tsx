@@ -9,10 +9,8 @@ type FollowRequestType = FollowRequest & {
 }
 
 const FriendRequestList = ({ requests }: { requests: FollowRequestType[] }) => {
-    console.log("requests", requests);
     const [requestsState, setRequestsState] = useState(requests);
     const [optimisticRequests, removeOptimisticRequests] = useOptimistic(requestsState, (state, value: number) => state.filter((req) => req.id !== value))
-    console.log("optimisticRequests", optimisticRequests);
     const accept = async (requestId: number) => {
         removeOptimisticRequests(requestId);
         try {
@@ -35,7 +33,6 @@ const FriendRequestList = ({ requests }: { requests: FollowRequestType[] }) => {
         <>
             {optimisticRequests.map((request: FollowRequestType) => {
                 const sender = request.sender;
-                console.log("sender", sender);
                 if (!sender) return null; // Skip if sender is not available
                 return (
                     <div className='flex items-center justify-between gap-4' key={request.id}>

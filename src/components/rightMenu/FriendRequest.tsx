@@ -8,22 +8,14 @@ import FriendRequestList from './FriendRequestList';
 type Props = {}
 
 const FriendRequest = async (props: Props) => {
-    const { userId }: { userId: string | null } = await auth();
+    const { userId } = await auth();
     const requests = await prisma.followRequest.findMany({
-        where: {
-            receiverId: userId
-        },
+        where: userId ? {receiverId: userId} : {},
         include: {
             sender: true
         }
     })
-    // if (!requests || requests.length === 0) {
-    //     return (
-    //         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>
-    //             <div className='text-gray-500'>No friend requests</div>
-    //         </div>
-    //     );
-    // }
+ 
 
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>

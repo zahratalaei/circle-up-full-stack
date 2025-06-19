@@ -20,7 +20,6 @@ const ProfileCard = async (props: Props) => {
                 }
         }}
     })
-    console.log("ProfileCard user:", user); // Debug the user data
     if(!user) return null
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-6'>

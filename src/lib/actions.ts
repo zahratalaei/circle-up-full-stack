@@ -109,3 +109,37 @@ export const declineFollowRequest = async (requestId: number) => {
         throw new Error("Failed to decline follow request");
     }
 }
+
+export const switchLike = async (postId:number) =>{
+    const {userId} = await auth()
+    if(!userId){
+        throw new Error("User not authenticated")
+    }
+    try{
+        const existingLike = await prisma.like.findFirst({
+            where:{
+                postId,
+                userId,
+            }
+        })
+        if(existingLike){
+            // If the like exists, delete it
+            await prisma.like.delete({
+                where:{
+                    id:existingLike.id
+                }
+            })
+        }else {
+            // If the like does not exist, create it
+            await prisma.like.create({
+                data:{
+                    postId,
+                    userId
+                }
+            })
+        }
+    }catch(error) {
+        console.error("Error switching like:", error);
+        throw new Error("Failed to switch like");
+    }
+}

@@ -56,8 +56,8 @@ model Post {
   image       String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  author      User?     @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId    String?
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
   likes       Like[]
   comments    Comment[]
 }
@@ -68,8 +68,8 @@ model Like {
   updatedAt DateTime @updatedAt
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId Int?
 }
@@ -81,8 +81,8 @@ model Comment {
   updatedAt DateTime @updatedAt
   post      Post?    @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId    Int?
-  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId    String?
+  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
   likes     Like[]
 }
 
@@ -103,10 +103,10 @@ model Follower {
   id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  follower    User?    @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
-  followerId  String?
-  following   User?    @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
-  followingId String?
+  follower    User    @relation("Follower", fields: [followerId], references: [id], onDelete: Cascade)
+  followerId  String
+  following   User    @relation("Following", fields: [followingId], references: [id], onDelete: Cascade)
+  followingId String
   @@unique([followerId, followingId])
 }
 
@@ -114,10 +114,10 @@ model FollowRequest {
   id         Int      @id @default(autoincrement())
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  sender     User?    @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
-  senderId   String?
-  receiver   User?    @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
-  receiverId String?
+  sender     User    @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId   String
+  receiver   User    @relation("Receiver", fields: [receiverId], references: [id], onDelete: Cascade)
+  receiverId String
 
   @@unique([senderId, receiverId])
 }
@@ -126,10 +126,10 @@ model Block {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  blocker   User?    @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
-  blockerId String?
-  blocked   User?    @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
-  blockedId String?
+  blocker   User    @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blockerId String
+  blocked   User    @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  blockedId String
 
   @@unique([blockedId, blockerId])
 }
@@ -141,6 +141,6 @@ model Story {
   image       String?
   createdAt   DateTime @default(now())
   expiredAt   DateTime
-  author      User?    @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId    String?  @unique
+  author      User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String  @unique
 }
