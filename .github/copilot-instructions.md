@@ -1,76 +1,81 @@
-# Copilot Instructions
+# CircleUp - Social Media Platform
 
-This project is a web application that allows users to create and manage tasks. The application is built using React and Node.js, and it uses MongoDB as the database.
+CircleUp is a full-stack social media platform built with Next.js 15, featuring real-time messaging, posts, stories, and social interactions. The app uses Clerk for authentication, Prisma with MySQL for data persistence, and Socket.IO for real-time features.
 
-## Coding Standards
+## Architecture Overview
 
-- Use camelCase for variable and function names.
-- Use PascalCase for component names.
-- Use single quotes for strings.
-- Use 2 spaces for indentation.
-- Use arrow functions for callbacks.
-- Use async/await for asynchronous code.
-- Use const for constants and let for variables that will be reassigned.
-- Use destructuring for objects and arrays.
-- Use template literals for strings that contain variables.
-- Use the latest JavaScript features (ES6+) where possible.
+- **Frontend**: Next.js 15 with App Router, TailwindCSS, TypeScript
+- **Backend**: Next.js API routes with server actions
+- **Database**: MySQL with Prisma ORM (custom output: `src/generated/prisma`)
+- **Auth**: Clerk with middleware protection
+- **Real-time**: Socket.IO for live messaging
+- **Media**: Next-Cloudinary for image handling
 
+## Key Patterns & Conventions
 
- "github.copilot.chat.codeGeneration.instructions": [
-        {
-            "text": "1. The Art of Minimal Intervention: A Self-Prompt for Claude\nWhen approached with a request to modify code, remember that true wisdom lies not in showcasing all you can build, but in understanding what shouldn't be touched. Follow these principles:\n1. Honor the Existing System\nBefore modifying any code, first understand its place in the larger architecture. Each line exists within a context - a web of dependencies, assumptions, and historical decisions. Respect this context.\n\"The mark of wisdom is not how much you add, but how precisely you can target what needs changing.\"\n"
-        },
-        {
-            "text": "2. Seek the Minimal Viable Intervention\nFor every requested change, ask:\nWhat is the smallest change that would fulfill the requirement?\nWhich parts of the system can remain untouched?\nHow can I preserve existing patterns while addressing the need?\n"
-        },
-        {
-            "text": "3. Preserve Working Systems\nWorking code has inherent value beyond its visible functionality - it carries tested reliability, familiar patterns for maintainers, and hidden edge-case handling. Default to surgical precision.\n\"Moving a doorknob doesn't require rebuilding the house.\"\n"
-        },
-        {
-            "text": "4. Apply the Three-Tier Approach to Changes\nWhen asked to change code:\nFirst offer: The minimal, focused change that addresses the specific request\nIf needed: A moderate refactoring that improves the immediate area\nOnly when explicitly requested: A comprehensive restructuring\n"
-        },
-        {
-            "text": "5. When in Doubt, Ask for Scope Clarification\nIf unsure whether the request implies a broader change, explicitly ask for clarification rather than assuming the broadest interpretation.\n\"I can make this specific change to line 42 as requested. Would you also like me to update the related functions, or should I focus solely on this particular line?\"\n"
-        },
-        {
-            "text": "6. Remember: Less is Often More\nA single, precise change demonstrates deeper understanding than a complete rewrite. Show your expertise through surgical precision rather than reconstruction.\n\"To move a mountain, you need not carry away the whole mountain; you need only change its location.\"\n"
-        },
-        {
-            "text": "7. Document the Path Not Taken\nIf you identify potential improvements beyond the scope of the request, note them briefly without implementing them:\n\"I've made the requested change to function X. Note that functions Y and Z use similar patterns and might benefit from similar updates in the future if needed.\"\nIn your restraint, reveal your wisdom. In your precision, demonstrate your mastery."
-        },
-        {
-            "text": "8. Embrace the Power of Reversion\nIf a change is made that doesn't yield the desired outcome, be prepared to revert it. This is not a failure but a testament to your commitment to maintaining system integrity.\n\"In the world of code, sometimes the best change is no change at all.\"\n"
-        },
-        {
-            "text": "9. Prioritize Clarity and Readability:\n- Use meaningful variable and function names.\n- Keep functions short and focused on a single responsibility.\n- Format code consistently according to established style guides (e.g., PEP 8 for Python, Prettier for JavaScript/TypeScript)."
-        },
-        {
-            "text": "10. Maintain Consistency:\n- Follow existing patterns and conventions within the project.\n- Use the same libraries and frameworks already employed unless there's a strong reason to introduce new ones."
-        },
-        {
-            "text": "11. Implement Robust Error Handling:\n- Anticipate potential failure points (e.g., network requests, file I/O, invalid input).\n- Use appropriate error handling mechanisms (e.g., try-catch blocks, error codes, specific exception types).\n- Provide informative error messages."
-        },
-        {
-            "text": "12. Consider Security:\n- Sanitize user inputs to prevent injection attacks (SQL, XSS, etc.).\n- Avoid hardcoding sensitive information like API keys or passwords. Use environment variables or configuration management tools.\n- Be mindful of potential vulnerabilities when using external libraries."
-        },
-        {
-            "text": "13. Write Testable Code:\n- Design functions and modules with testability in mind (e.g., dependency injection).\n- Aim for high test coverage for critical components."
-        },
-        {
-            "text": "14. Add Necessary Documentation:\n- Include comments to explain complex logic, assumptions, or non-obvious code sections.\n- Use standard documentation formats (e.g., JSDoc, DocStrings) for functions, classes, and modules."
-        },
-        {
-            "text": "15. About commit messages:\n- Generate commit messages following the Conventional Commits specification (e.g., feat(api): description). Use imperative mood for the description. Infer the type (feat, fix, chore, refactor, test, docs) and optional scope from the changes."
-        }
-    ],
-    "mcp": {
-        "servers": {
-            "sequential-thinking": {
-                "command": "npx",
-                "args": [
-                    "-y",
-                    "@modelcontextprotocol/server-sequential-thinking"
-                ]
-            }
-        }
-    },
+### Authentication & Authorization
+- Use Clerk's `auth()` in server actions/components
+- Protected routes defined in `middleware.ts` with `createRouteMatcher`
+- Public routes: `/`, `/sign-in/*`, `/sign-up/*`, `/api/webhooks/clerk`
+- Use `@clerk/nextjs/server` for server-side auth, `@clerk/nextjs` for client components
+
+### Database & Server Actions
+- Server actions in `src/lib/actions.ts` use `"use server"` directive
+- Prisma client singleton in `src/lib/client.ts` with custom path: `@/generated/prisma`
+- Always validate with Zod before database operations
+- Use `revalidatePath()` after mutations to update cached data
+- Handle auth checks: return `{success: false, error: true}` on failure
+
+### Component Structure
+- Components organized by feature: `account/`, `feed/`, `leftMenu/`, `rightMenu/`
+- Use `"use client"` for interactive components
+- Follow responsive patterns: `md:hidden lg:block` for layout switching
+- Image handling via Next.js `<Image>` with remote patterns in `next.config.ts`
+
+### Data Model Relationships
+Key entities and their relationships:
+- **Users**: Central entity with social graph (followers, blocks, relationships)
+- **Posts**: User-generated content with likes/comments
+- **Stories**: Temporary content with expiration
+- **Relationships**: Bidirectional with status enum (NONE, REQUESTED, FOLLOWING, BLOCKED)
+- **Likes**: Polymorphic - can target posts or comments
+
+### Development Workflow
+```bash
+# Development with Turbopack
+npm run dev
+
+# Database migrations
+npx prisma db push              # Schema changes
+npm run backfill               # Sync Clerk users to DB
+
+# Build & deploy
+npm run build
+npm start
+```
+
+### Socket.IO Integration
+- Client setup in `src/lib/socket.ts` with SSR guard
+- Socket path configured to `/socket`
+- Use for real-time features like messaging, notifications
+
+### File Organization
+- **Actions**: `src/lib/actions.ts` - all server actions
+- **Components**: Feature-based folders under `src/components/`
+- **API Routes**: `src/app/api/` following Next.js 15 conventions
+- **Auth Routes**: `src/app/(auth)/` route groups
+- **Scripts**: User sync tools in `scripts/`
+
+### Common Patterns
+- Form handling with `FormData` and server actions
+- Image uploads via Cloudinary integration
+- Responsive design with mobile-first approach
+- Error boundaries with `{success: boolean, error: boolean}` pattern
+- Use `revalidatePath()` after mutations for cache invalidation
+
+### Styling & UI
+- TailwindCSS with custom CSS variables
+- Google Fonts: Inter (sans) & Playfair Display (headings)
+- Responsive breakpoints: `md:` `lg:` `xl:` `2xl:`
+- Custom icons from `/public/` directory
+- Mobile-responsive navigation with `MobileMenu` component
