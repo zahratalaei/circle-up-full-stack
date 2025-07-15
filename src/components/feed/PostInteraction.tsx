@@ -2,34 +2,91 @@
 import Image from "next/image"
 import { MessageCircleMore, Share2, ThumbsUp } from "lucide-react";
 import { switchLike } from "@/lib/actions";
-import { useOptimistic, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-
-type LikeState = {
+import { useRouter } from "next/navigation";
+export type LikeState = {
     likeCount: number;
     isLiked: boolean;
 }
 
-const PostInteraction = ({ postId, likes, commentNumber }: { postId: number, likes: (string | null)[], commentNumber: number }) => {
-    const { isLoaded, userId } = useAuth()
-    const [likeState, setLikeState] = useState<LikeState>({ likeCount: likes.length, isLiked: userId ? likes.includes(userId) : false });
-
-    const [optimisticLike, switchOptimisticLike] = useOptimistic(likeState, (state, value) => {
-        return {
-            likeCount: state.isLiked ? state.likeCount - 1 : state.likeCount + 1,
-            isLiked: !state.isLiked
-        }
-    })
+export type PostInteractionProps = {
+    postId: number;
+    postLikers: (string | null)[];
+    postLikeCount: number;
+    //   commentLikeCount: number;
+    commentNumber: number;
+};
+// const PostInteraction = ({ postId, likes, commentNumber }: { postId: number, likes: (string | null)[], commentNumber: number }) => {
+const PostInteraction = ({
+    postId,
+    postLikers,
+    postLikeCount,
+    commentNumber,
+}: PostInteractionProps) => {
+    const { userId } =  useAuth()
+    // Initialize state from props
+    // const initialLikeState: LikeState = {
+    //     likeCount: postLikers.length,
+    //     isLiked: Boolean(userId && postLikers.includes(userId)),
+    // };
+    // const [likeState, setLikeState] = useState<LikeState>(initialLikeState);
+    const [isLiking, setIsLiking] = useState<boolean>(false);
+    const [isLiked, setIsLike] = useState<boolean>(Boolean(userId && postLikers.includes(userId)));
+    const [optimisticLikeCount, setOptimisticLikeCount] = useState<number>(postLikers.length);
+    
+    useEffect(()=>{
+        setOptimisticLikeCount(postLikers.length);
+        setIsLike(Boolean(userId && postLikers.includes(userId)));
+    },[postLikers, userId])
     const likeAction = async () => {
-        switchOptimisticLike("")
+        if (isLiking) return; // Prevent multiple clicks
+        setIsLiking(true);
         try {
-            switchLike(postId)
-            setLikeState((state) => ({
-                likeCount: state.isLiked ? state.likeCount - 1 : state.likeCount + 1,
-                isLiked: !state.isLiked
-            }))
-        } catch (error) { }
-    }
+             await switchLike({ postId, commentId: null });
+            // setLikeState({ likeCount, isLiked });
+            setOptimisticLikeCount((prev) => prev + (isLiked ? -1 : 1));
+            setIsLike(!isLiked);
+            // router.refresh();
+        } catch (error) {
+            console.error("Error liking post:", error);
+            startTransition(() => {
+                setOptimisticLikeCount(postLikers.length);
+                setIsLike(Boolean(userId && postLikers.includes(userId)));
+            });
+        } finally {
+            setIsLiking(false);
+        }
+    };
+    // useEffect(() => {
+    //     const newState = {
+    //         likeCount: postLikers.length,
+    //         isLiked: Boolean(userId && postLikers.includes(userId)),
+    //     }
+    //     setLikeState(newState)
+    // }, [postLikers, userId])
+    // // Optimistic updater flips isLiked & adjusts count
+    // const [optimisticLike, switchOptimisticLike] = useOptimistic<LikeState, void>(
+    //     likeState,
+    //     (state) => ({
+    //         likeCount: state.likeCount + (state.isLiked ? -1 : 1),
+    //         isLiked: !state.isLiked,
+    //     })
+    // );
+    // const likeAction = async () => {
+    //     startTransition(() => switchOptimisticLike())
+    //     try {
+    //         const { likeCount, isLiked } = await switchLike({ postId, commentId: null })
+
+    //         setLikeState({ likeCount, isLiked });
+    //         // router.refresh()
+    //     } catch (error) {
+    //         console.error("Error liking post:", error);
+    //         startTransition(() => switchOptimisticLike());
+
+    //     }
+    // }
+
     return (
         <div className="flex flex-col md:flex-row md:items-center md:justify-between text-sm my-4 space-y-2 md:space-y-0 my-4">
             <div className="flex gap-8 text-yellow-700">
@@ -37,7 +94,8 @@ const PostInteraction = ({ postId, likes, commentNumber }: { postId: number, lik
                     <form action={likeAction}>
                         <button>
                             <Image
-                                src={optimisticLike.isLiked ? "/liked.png" :"/like.png"}
+                                src={isLiked ? "/liked.png" : "/like.png"}
+                                // src={optimisticLike.isLiked ? "/liked.png" : "/like.png"}
                                 alt=""
                                 width={16}
                                 height={16}
@@ -48,7 +106,8 @@ const PostInteraction = ({ postId, likes, commentNumber }: { postId: number, lik
                     {/* <ThumbsUp  size={16} className="cursor-pointer icon-primary" /> */}
                     <span className="text-gray-300">|</span>
                     <span className="text-gray-500">
-                        {optimisticLike.likeCount} <span className="hidden md:inline"> Likes</span>{" "}
+                        {optimisticLikeCount} <span className="hidden md:inline"> Likes</span>{" "}
+                        {/* {optimisticLike.likeCount} <span className="hidden md:inline"> Likes</span>{" "} */}
                     </span>
                 </div>
                 <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">

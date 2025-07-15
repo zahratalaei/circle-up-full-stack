@@ -16,7 +16,6 @@ export type SettingsPayload = {
 const SettingsForm = () => {
     const {userId:currentUserId, isLoaded} = useAuth()
     const {user} = useUser()
-    console.log("user", user)
     const [name,setName] = useState<string>("")
   return (
     <form>

@@ -5,8 +5,15 @@ import { PostWithAuthor } from "./Feed";
 import PostInteraction from "./PostInteraction";
 
 
-const PostContent = ({post}:{post:PostWithAuthor}) => {
-  console.log(post)
+export type PostContentProps = {
+  post: PostWithAuthor;
+  postLikers: (string | null)[];
+  postLikeCount: number;
+  commentLikeCount: number;
+  commentNumber: number;
+};
+const PostContent = ({post, postLikers, postLikeCount, commentLikeCount, commentNumber}:PostContentProps) => {
+ 
   return (
     <div className="flex flex-col gap-4">
       {/* User */}
@@ -29,7 +36,7 @@ const PostContent = ({post}:{post:PostWithAuthor}) => {
       <div className="flex flex-col gap-4">
         <div className="w-full min-h-96 relative">
           <Image
-            src={post?.image ?? '/defaultImage.jpg'}
+            src={post?.image ?? '/DefaultImage.jpg'}
             alt=""
             fill
             className="object-cover rounded-md"
@@ -40,9 +47,14 @@ const PostContent = ({post}:{post:PostWithAuthor}) => {
         </p>
       </div>
       {/* Interaction */}
-      <PostInteraction postId={post.id} likes={post.likes.map(like=>like.userId)} commentNumber={post._count.comments} />     
+      <PostInteraction  postId={post.id}
+        postLikers={postLikers}
+        postLikeCount={postLikeCount}
+        commentNumber={commentNumber}
+         />     
+      {/* <PostInteraction postId={post.id} likes={post.likes.map(like=>like.userId)} commentNumber={post._count.comments} />      */}
       {/* Comments */}
-      <Comments/>
+      <Comments postId={post.id}/>
     </div>
   );
 };

@@ -22,7 +22,6 @@ const UserMediaCard = async ({ user }: { user: User }) => {
             image: true,
         },
     })
-    console.log("imagePosts", imagePosts);
 
     return (
         <div className='p-4 bg-white shadow-md text-sm mx-2 rounded-lg flex flex-col gap-4'>

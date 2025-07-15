@@ -22,7 +22,7 @@ async function main() {
           email:    u.primaryEmailAddress?.emailAddress ?? "",
           name:     u.firstName  ?? "",
           surname:  u.lastName   ?? "",
-          avatar:   u.profileImageUrl ?? "/noAvatar.png",
+          avatar:   u.imageUrl ?? "/noAvatar.png",
           username: u.username   ?? "",
           city:     (u.publicMetadata.city    as string) ?? "",
           school:   (u.publicMetadata.school  as string) ?? "",

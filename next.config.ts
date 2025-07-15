@@ -31,6 +31,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "img.clerk.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "www.gravatar.com",
         pathname: "/**",
       },
