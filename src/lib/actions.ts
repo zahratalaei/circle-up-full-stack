@@ -256,3 +256,88 @@ export const addPost = async (formData: FormData) => {
     throw new Error("Failed to create post");
   }
 };
+
+export const deletePost = async (postId: number) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    // First, check if the user is authorized to delete this post
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true }
+    });
+
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    if (post.authorId !== userId) {
+      throw new Error("Not authorized to delete this post");
+    }
+
+    // Delete the post (this will cascade delete likes and comments)
+    await prisma.post.delete({
+      where: { id: postId }
+    });
+
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    throw new Error("Failed to delete post");
+  }
+};
+
+export const editPost = async (postId: number, formData: FormData) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const description = formData.get("description") as string;
+  const image = formData.get("image") as string | null;
+
+  if (!description || description.trim() === "") {
+    throw new Error("Post description is required");
+  }
+
+  try {
+    // First, check if the user is authorized to edit this post
+    const existingPost = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { authorId: true, image: true }
+    });
+
+    if (!existingPost) {
+      throw new Error("Post not found");
+    }
+
+    if (existingPost.authorId !== userId) {
+      throw new Error("Not authorized to edit this post");
+    }
+
+    // Update the post
+    const updatedPost = await prisma.post.update({
+      where: { id: postId },
+      data: {
+        description: description.trim(),
+        image: image || existingPost.image, // Keep existing image if no new image provided
+        updatedAt: new Date(),
+      },
+      include: {
+        author: true,
+        likes: true,
+        comments: true,
+      },
+    });
+
+    revalidatePath('/');
+    return { success: true, post: updatedPost };
+  } catch (error) {
+    console.error("Error editing post:", error);
+    throw new Error("Failed to edit post");
+  }
+};

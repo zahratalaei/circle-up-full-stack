@@ -3,6 +3,7 @@ import React from "react";
 import { PostWithAuthor } from "./Feed";
 import PostInteractionWrapper from "./PostInteractionWrapper";
 import { fetchComments } from "./fetchComments";
+import PostOptions from "./PostOptions";
 
 
 export type PostContentProps = {
@@ -30,9 +31,12 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
           />
           <span className="font-medium text-sm">{post?.author?.username ?? ""}</span>
         </div>
-        <div>
-          <Image src="/more.png" alt="" width={16} height={16} />
-        </div>
+        <PostOptions 
+          postId={post.id} 
+          authorId={post.authorId} 
+          currentDescription={post.description ?? ""}
+          currentImage={post.image}
+        />
       </div>
       {/* Desc */}
       <div className="flex flex-col gap-4">
@@ -45,6 +49,7 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
                 controls 
                 className="w-full h-auto rounded-md"
                 style={{ maxHeight: '600px' }}
+                preload="metadata"
               />
             ) : (
               <Image
