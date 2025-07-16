@@ -36,14 +36,26 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
       </div>
       {/* Desc */}
       <div className="flex flex-col gap-4">
-        <div className="w-full min-h-96 relative">
-          <Image
-            src={post?.image ?? '/DefaultImage.jpg'}
-            alt=""
-            fill
-            className="object-cover rounded-md"
-          />
-        </div>
+        {post?.image && (
+          <div className="w-full min-h-96 relative">
+            {/* Check if it's a video */}
+            {post.image.includes('.mp4') || post.image.includes('.mov') || post.image.includes('.avi') || post.image.includes('.webm') ? (
+              <video 
+                src={post.image} 
+                controls 
+                className="w-full h-auto rounded-md"
+                style={{ maxHeight: '600px' }}
+              />
+            ) : (
+              <Image
+                src={post.image}
+                alt=""
+                fill
+                className="object-cover rounded-md"
+              />
+            )}
+          </div>
+        )}
         <p>
           {post?.description ?? ""}
         </p>

@@ -221,3 +221,38 @@ export const deleteComment = async (commentId: number) => {
     throw new Error("Failed to delete comment");
   }
 };
+
+export const addPost = async (formData: FormData) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const description = formData.get("description") as string;
+  const image = formData.get("image") as string | null;
+  
+  if (!description || description.trim() === "") {
+    throw new Error("Post description is required");
+  }
+
+  try {
+    const post = await prisma.post.create({
+      data: {
+        description: description.trim(),
+        image: image || null,
+        authorId: userId,
+      },
+      include: {
+        author: true,
+        likes: true,
+        comments: true,
+      },
+    });
+
+    revalidatePath("/");
+    return post;
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw new Error("Failed to create post");
+  }
+};
