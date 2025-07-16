@@ -3,9 +3,10 @@
 import Image from 'next/image'
 import React, { useState, useRef } from 'react'
 import { SendHorizontal, X } from 'lucide-react';
-import { addPost } from '@/lib/actions';
+import { addPost, addPostWithEvent } from '@/lib/actions';
 import { useUser } from '@clerk/nextjs';
 import { CldUploadWidget } from 'next-cloudinary';
+import AddEvent from './feed/AddEvent';
 
 const AddPost = () => {
     const { user } = useUser();
@@ -13,11 +14,14 @@ const AddPost = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
     const [isUploading, setIsUploading] = useState(false);
+    const [showEventModal, setShowEventModal] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState<any>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        if (!user || !description.trim()) return;
+        // Allow submission if user exists and either has description or selected event
+        if (!user || (!description.trim() && !selectedEvent)) return;
         
         setIsSubmitting(true);
         
@@ -28,9 +32,18 @@ const AddPost = () => {
                 formData.append("image", selectedImage);
             }
             
-            await addPost(formData);
-            setDescription(""); // Clear the form after successful submission
-            setSelectedImage(null); // Clear the image after successful submission
+            let result;
+            if (selectedEvent) {
+                result = await addPostWithEvent(formData, selectedEvent.id);
+            } else {
+                result = await addPost(formData);
+            }
+            
+            if (result.success) {
+                setDescription(""); // Clear the form after successful submission
+                setSelectedImage(null); // Clear the image after successful submission
+                setSelectedEvent(null); // Clear the selected event
+            }
         } catch (error) {
             console.error("Error creating post:", error);
         } finally {
@@ -40,6 +53,15 @@ const AddPost = () => {
 
     const handleRemoveImage = () => {
         setSelectedImage(null);
+    };
+
+    const handleEventCreated = (event: any) => {
+        setSelectedEvent(event);
+        setShowEventModal(false);
+    };
+
+    const removeEvent = () => {
+        setSelectedEvent(null);
     };
   
   if (!user) {
@@ -71,11 +93,11 @@ const AddPost = () => {
                 <button 
                     type='submit' 
                     className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
-                    disabled={isSubmitting || !description.trim()}
+                    disabled={isSubmitting || (!description.trim() && !selectedEvent)}
                 >
                     <SendHorizontal 
                         size={28} 
-                        color={isSubmitting || !description.trim() ? "#ccc" : "#905906"}  
+                        color={isSubmitting || (!description.trim() && !selectedEvent) ? "#ccc" : "#905906"}  
                         strokeWidth={2}
                     />
                 </button>
@@ -108,6 +130,30 @@ const AddPost = () => {
                     >
                         <X size={16} />
                     </button>
+                </div>
+            )}
+
+            {/* Event Preview */}
+            {selectedEvent && (
+                <div className='mt-4 relative'>
+                    <div className='border border-gray-200 rounded-lg p-4 bg-gray-50'>
+                        <div className='flex items-center justify-between mb-2'>
+                            <h3 className='font-semibold text-gray-800'>Event: {selectedEvent.title}</h3>
+                            <button 
+                                type='button'
+                                onClick={removeEvent}
+                                className='text-red-500 hover:text-red-700 transition-colors'
+                            >
+                                <X size={16} />
+                            </button>
+                        </div>
+                        <p className='text-gray-600 text-sm mb-2'>{selectedEvent.description}</p>
+                        <div className='flex items-center gap-4 text-xs text-gray-500'>
+                            <span>📅 {selectedEvent.date instanceof Date ? selectedEvent.date.toLocaleDateString() : selectedEvent.date}</span>
+                            {selectedEvent.time && <span>🕐 {selectedEvent.time}</span>}
+                            {selectedEvent.location && <span>📍 {selectedEvent.location}</span>}
+                        </div>
+                    </div>
                 </div>
             )}
             
@@ -174,7 +220,10 @@ const AddPost = () => {
                     )}
                 </CldUploadWidget>
                 
-                <div className='flex gap-2 cursor-pointer'>
+                <div 
+                    className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' 
+                    onClick={() => setShowEventModal(true)}
+                >
                     <Image src="/addEvent.png" alt="" width={20} height={20}/>Event
                 </div>
                 <div className='flex gap-2 cursor-pointer'>
@@ -182,6 +231,14 @@ const AddPost = () => {
                 </div>
             </div>
         </div>
+        
+        {/* Event Modal */}
+        {showEventModal && (
+            <AddEvent 
+                onClose={() => setShowEventModal(false)}
+                onEventCreated={handleEventCreated}
+            />
+        )}
     </div>
   )
 }

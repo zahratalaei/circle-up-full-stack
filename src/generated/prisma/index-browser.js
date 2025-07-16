@@ -145,7 +145,8 @@ exports.Prisma.PostScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  authorId: 'authorId'
+  authorId: 'authorId',
+  eventId: 'eventId'
 };
 
 exports.Prisma.LikeScalarFieldEnum = {
@@ -207,6 +208,19 @@ exports.Prisma.StoryScalarFieldEnum = {
   image: 'image',
   createdAt: 'createdAt',
   expiredAt: 'expiredAt',
+  authorId: 'authorId'
+};
+
+exports.Prisma.EventScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  date: 'date',
+  time: 'time',
+  image: 'image',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   authorId: 'authorId'
 };
 
@@ -279,6 +293,15 @@ exports.Prisma.StoryOrderByRelevanceFieldEnum = {
   image: 'image',
   authorId: 'authorId'
 };
+
+exports.Prisma.EventOrderByRelevanceFieldEnum = {
+  title: 'title',
+  description: 'description',
+  location: 'location',
+  time: 'time',
+  image: 'image',
+  authorId: 'authorId'
+};
 exports.RelationStatus = exports.$Enums.RelationStatus = {
   NONE: 'NONE',
   REQUESTED: 'REQUESTED',
@@ -295,7 +318,8 @@ exports.Prisma.ModelName = {
   Follower: 'Follower',
   FollowRequest: 'FollowRequest',
   Block: 'Block',
-  Story: 'Story'
+  Story: 'Story',
+  Event: 'Event'
 };
 
 /**

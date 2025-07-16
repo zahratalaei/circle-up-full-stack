@@ -40,6 +40,38 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
       </div>
       {/* Desc */}
       <div className="flex flex-col gap-4">
+        {/* Event Information */}
+        {post?.event && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="text-white text-sm">📅</span>
+              </div>
+              <div>
+                <h3 className="font-semibold text-blue-900">{post.event.title}</h3>
+                <div className="flex items-center gap-4 text-xs text-blue-700">
+                  <span>{new Date(post.event.date).toLocaleDateString()}</span>
+                  {post.event.time && <span>🕐 {post.event.time}</span>}
+                  {post.event.location && <span>📍 {post.event.location}</span>}
+                </div>
+              </div>
+            </div>
+            {post.event.description && (
+              <p className="text-blue-800 text-sm mb-3">{post.event.description}</p>
+            )}
+            {post.event.image && (
+              <div className="relative w-full h-40 rounded-lg overflow-hidden">
+                <Image
+                  src={post.event.image}
+                  alt={post.event.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            )}
+          </div>
+        )}
+        
         {post?.image && (
           <div className="w-full min-h-96 relative">
             {/* Check if it's a video */}

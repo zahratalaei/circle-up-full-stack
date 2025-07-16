@@ -16,6 +16,7 @@ import prisma from '@/lib/client'
 // }
 export type PostWithAuthor = Post & {
   author: User | null;
+  event: { id: number; title: string; description: string | null; date: Date; time: string | null; location: string | null; image: string | null } | null;
   likes: { userId: string | null }[];
   comments: (Comment & { likes: { userId: string | null }[] })[];
   _count: {
@@ -35,6 +36,17 @@ const Feed = async ({ username }: { username?: string }) => {
       },
       include: {
         author: true,
+        event: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            date: true,
+            time: true,
+            location: true,
+            image: true
+          }
+        },
         likes: {
           where: { commentId: null },
           select: {
@@ -81,6 +93,17 @@ const Feed = async ({ username }: { username?: string }) => {
       },
       include: {
         author: true,
+        event: {
+          select: {
+            id: true,
+            title: true,
+            description: true,
+            date: true,
+            time: true,
+            location: true,
+            image: true
+          }
+        },
         likes: {
           where: { commentId: null },
           select: {

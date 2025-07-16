@@ -47,6 +47,7 @@ model User {
   blocks      Block[]         @relation("Blocker")
   blockedBy   Block[]         @relation("Blocked")
   stories     Story[]
+  events      Event[]
   relations   Relationship[]  @relation("relations_from")
   relatedBy   Relationship[]  @relation("relations_to")
 }
@@ -62,6 +63,8 @@ model Post {
   authorId    String
   likes       Like[]
   comments    Comment[]
+  event       Event?    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId     Int?
 }
 
 model Like {
@@ -153,4 +156,19 @@ model Story {
   expiredAt   DateTime
   author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId    String   @unique
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  location    String?
+  date        DateTime
+  time        String?
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId    String
+  posts       Post[]
 }

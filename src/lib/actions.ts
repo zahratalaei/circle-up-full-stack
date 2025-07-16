@@ -231,14 +231,12 @@ export const addPost = async (formData: FormData) => {
   const description = formData.get("description") as string;
   const image = formData.get("image") as string | null;
   
-  if (!description || description.trim() === "") {
-    throw new Error("Post description is required");
-  }
-
+  // Allow empty descriptions for posts that might have just images or events
+  
   try {
     const post = await prisma.post.create({
       data: {
-        description: description.trim(),
+        description: description ? description.trim() : null,
         image: image || null,
         authorId: userId,
       },
@@ -250,7 +248,7 @@ export const addPost = async (formData: FormData) => {
     });
 
     revalidatePath("/");
-    return post;
+    return { success: true, post };
   } catch (error) {
     console.error("Error creating post:", error);
     throw new Error("Failed to create post");
@@ -339,5 +337,83 @@ export const editPost = async (postId: number, formData: FormData) => {
   } catch (error) {
     console.error("Error editing post:", error);
     throw new Error("Failed to edit post");
+  }
+};
+
+export const createEvent = async (eventData: {
+  title: string;
+  description?: string;
+  location?: string;
+  date: string;
+  time?: string;
+  image?: string;
+}) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const { title, description, location, date, time, image } = eventData;
+
+  if (!title || !date) {
+    throw new Error("Event title and date are required");
+  }
+
+  try {
+    const event = await prisma.event.create({
+      data: {
+        title: title.trim(),
+        description: description?.trim() || null,
+        location: location?.trim() || null,
+        date: new Date(date),
+        time: time || null,
+        image: image || null,
+        authorId: userId,
+      },
+      include: {
+        author: true,
+      },
+    });
+
+    revalidatePath("/");
+    return event;
+  } catch (error) {
+    console.error("Error creating event:", error);
+    throw new Error("Failed to create event");
+  }
+};
+
+export const addPostWithEvent = async (formData: FormData, eventId: string) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  const description = formData.get("description") as string;
+  const image = formData.get("image") as string | null;
+  
+  // Allow empty descriptions for posts with events
+  
+  try {
+    const post = await prisma.post.create({
+      data: {
+        description: description ? description.trim() : null,
+        image: image || null,
+        eventId: eventId ? parseInt(eventId) : null,
+        authorId: userId,
+      },
+      include: {
+        author: true,
+        likes: true,
+        comments: true,
+        event: true,
+      },
+    });
+
+    revalidatePath("/");
+    return { success: true, post };
+  } catch (error) {
+    console.error("Error creating post:", error);
+    throw new Error("Failed to create post");
   }
 };
