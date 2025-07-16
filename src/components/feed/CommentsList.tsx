@@ -3,7 +3,7 @@
 import React, { startTransition, useOptimistic, useState, useRef, useEffect } from 'react'
 import Image from 'next/image'
 
-import { CommentWithUser } from './Comments'
+import { CommentWithUser } from './fetchComments'
 import CommentInteraction from './CommentInteraction'
 import { useUser } from '@clerk/nextjs'
 import { addComment } from '@/lib/actions'
@@ -37,26 +37,49 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
 
     // Recursive function to render nested replies
     const renderReplies = (replies: CommentWithUser[], level: number = 0) => {
-        const maxLevel = 3; // Limit nesting to prevent infinite depth
+        const maxLevel = 10; // Allow very deep nesting
         if (level > maxLevel) return null;
         
         return replies.map((reply) => (
-            <div key={reply.id} className={`mt-3 ${level === 0 ? 'ml-14' : 'ml-8'}`}>
+            <div key={reply.id} className={`mt-3 ${level === 0 ? 'ml-14' : 'ml-6'}`}>
                 <div className='flex gap-3'>
                     {/* Reply Avatar */}
                     <Image 
                         src={reply.user.avatar ?? '/noAvatar'} 
                         alt="" 
-                        className={`rounded-full object-cover icon-primary ${level === 0 ? 'w-8 h-8' : 'w-6 h-6'}`} 
-                        width={level === 0 ? 32 : 24} 
-                        height={level === 0 ? 32 : 24} 
+                        className={`rounded-full object-cover icon-primary ${
+                            level === 0 ? 'w-8 h-8' : 
+                            level === 1 ? 'w-7 h-7' : 
+                            level === 2 ? 'w-6 h-6' :
+                            'w-5 h-5'
+                        }`} 
+                        width={
+                            level === 0 ? 32 : 
+                            level === 1 ? 28 : 
+                            level === 2 ? 24 :
+                            20
+                        } 
+                        height={
+                            level === 0 ? 32 : 
+                            level === 1 ? 28 : 
+                            level === 2 ? 24 :
+                            20
+                        } 
                     />
                     {/* Reply Content */}
                     <div className='flex flex-col gap-1 flex-1'>
-                        <span className={`font-medium ${level === 0 ? 'text-sm' : 'text-xs'}`}>
+                        <span className={`font-medium ${
+                            level === 0 ? 'text-sm' : 
+                            level === 1 ? 'text-xs' : 
+                            'text-xs'
+                        }`}>
                             {reply.user.username}
                         </span>
-                        <p className={`${level === 0 ? 'text-sm' : 'text-xs'}`}>
+                        <p className={`${
+                            level === 0 ? 'text-sm' : 
+                            level === 1 ? 'text-xs' : 
+                            'text-xs'
+                        }`}>
                             {reply.content}
                         </p>
                         {/* Reply Interaction */}
@@ -71,14 +94,20 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                 
                 {/* Reply form for this reply */}
                 {activeReplyId === reply.id && user && (
-                    <div className={`mt-2 ${level === 0 ? 'ml-11' : 'ml-8'}`}>
+                    <div className={`mt-2 ${
+                        level === 0 ? 'ml-11' : 
+                        level === 1 ? 'ml-9' : 
+                        'ml-7'
+                    }`}>
                         <div className='flex items-center gap-2'>
                             <Image 
                                 src={user?.imageUrl} 
                                 alt="" 
-                                className='w-6 h-6 rounded-full object-cover' 
-                                width={24} 
-                                height={24} 
+                                className={`rounded-full object-cover ${
+                                    level <= 2 ? 'w-6 h-6' : 'w-5 h-5'
+                                }`} 
+                                width={level <= 2 ? 24 : 20} 
+                                height={level <= 2 ? 24 : 20} 
                             />
                             <form onSubmit={(e) => {
                                 e.preventDefault()

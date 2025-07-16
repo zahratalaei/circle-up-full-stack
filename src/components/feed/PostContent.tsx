@@ -1,8 +1,8 @@
 import Image from "next/image";
 import React from "react";
-import Comments from "./Comments";
 import { PostWithAuthor } from "./Feed";
-import PostInteraction from "./PostInteraction";
+import PostInteractionWrapper from "./PostInteractionWrapper";
+import { fetchComments } from "./fetchComments";
 
 
 export type PostContentProps = {
@@ -12,7 +12,9 @@ export type PostContentProps = {
   commentLikeCount: number;
   commentNumber: number;
 };
-const PostContent = ({post, postLikers, postLikeCount, commentLikeCount, commentNumber}:PostContentProps) => {
+const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, commentNumber}:PostContentProps) => {
+  // Fetch comments data on the server side
+  const comments = await fetchComments(post.id);
  
   return (
     <div className="flex flex-col gap-4">
@@ -46,15 +48,14 @@ const PostContent = ({post, postLikers, postLikeCount, commentLikeCount, comment
           {post?.description ?? ""}
         </p>
       </div>
-      {/* Interaction */}
-      <PostInteraction  postId={post.id}
+      {/* Interaction and Comments */}
+      <PostInteractionWrapper
+        post={post}
         postLikers={postLikers}
         postLikeCount={postLikeCount}
         commentNumber={commentNumber}
-         />     
-      {/* <PostInteraction postId={post.id} likes={post.likes.map(like=>like.userId)} commentNumber={post._count.comments} />      */}
-      {/* Comments */}
-      <Comments postId={post.id}/>
+        comments={comments}
+      />
     </div>
   );
 };

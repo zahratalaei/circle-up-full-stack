@@ -16,6 +16,7 @@ export type PostInteractionProps = {
     postLikeCount: number;
     //   commentLikeCount: number;
     commentNumber: number;
+    onToggleComments?: () => void;
 };
 // const PostInteraction = ({ postId, likes, commentNumber }: { postId: number, likes: (string | null)[], commentNumber: number }) => {
 const PostInteraction = ({
@@ -23,6 +24,7 @@ const PostInteraction = ({
     postLikers,
     postLikeCount,
     commentNumber,
+    onToggleComments,
 }: PostInteractionProps) => {
     const { userId } =  useAuth()
     // Initialize state from props
@@ -88,7 +90,7 @@ const PostInteraction = ({
     // }
 
     return (
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between text-sm my-4 space-y-2 md:space-y-0 my-4">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between text-sm my-4 space-y-2 md:space-y-0">
             <div className="flex gap-8 text-yellow-700">
                 <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
                     <form action={likeAction}>
@@ -117,6 +119,7 @@ const PostInteraction = ({
                         width={16}
                         height={16}
                         className="cursor-pointer icon-primary"
+                        onClick={() => onToggleComments && onToggleComments()}
                     />
                     {/* <MessageCircleMore  size={16} className="cursor-pointer icon-primary bg-muted" /> */}
                     <span className="text-gray-300">|</span>
