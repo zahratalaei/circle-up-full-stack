@@ -1,10 +1,13 @@
 import prisma from '@/lib/client'
-import { Comment, Like, User } from '@/generated/prisma'
+import { Comment, Like, User, Post } from '@/generated/prisma'
 
 export type CommentWithUser = Comment & {
     user: User,
     likes: Like[];
     replies?: CommentWithUser[];
+    post: {
+        authorId: string;
+    };
 }
 
 export const fetchComments = async (postId: number): Promise<CommentWithUser[]> => {
@@ -16,6 +19,11 @@ export const fetchComments = async (postId: number): Promise<CommentWithUser[]> 
         include: {
             user: true,
             likes: true,
+            post: {
+                select: {
+                    authorId: true
+                }
+            }
         },
         orderBy: {
             createdAt: 'asc'

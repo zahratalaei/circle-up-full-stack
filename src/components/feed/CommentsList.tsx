@@ -5,6 +5,7 @@ import Image from 'next/image'
 
 import { CommentWithUser } from './fetchComments'
 import CommentInteraction from './CommentInteraction'
+import CommentOptions from './CommentOptions'
 import { useUser } from '@clerk/nextjs'
 import { addComment } from '@/lib/actions'
 import dynamic from 'next/dynamic'
@@ -28,11 +29,25 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
     const replyEmojiPickerRef = useRef<HTMLDivElement>(null)
     const mainInputRef = useRef<HTMLInputElement>(null)
     const replyInputRef = useRef<HTMLInputElement>(null)
-    const [optimisticComments, addOptimisticComments] = useOptimistic<CommentWithUser[], CommentWithUser>(
-        comments, (currentComments, newComment) => [
-            ...currentComments,
-            newComment
-        ]
+    const [optimisticComments, addOptimisticComments] = useOptimistic<CommentWithUser[], CommentWithUser | { type: 'delete', id: number }>(
+        comments, (currentComments, action) => {
+            if (typeof action === 'object' && 'type' in action && action.type === 'delete') {
+                // Remove comment and its replies
+                const removeCommentAndReplies = (comments: CommentWithUser[]): CommentWithUser[] => {
+                    return comments.filter(comment => {
+                        if (comment.id === action.id) {
+                            return false;
+                        }
+                        if (comment.replies) {
+                            comment.replies = removeCommentAndReplies(comment.replies);
+                        }
+                        return true;
+                    });
+                };
+                return removeCommentAndReplies(currentComments);
+            }
+            return [...currentComments, action as CommentWithUser];
+        }
     )
 
     // Recursive function to render nested replies
@@ -90,6 +105,13 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                             onReply={() => handleReply(reply.id)}
                         />
                     </div>
+                    {/* Comment Options */}
+                    <CommentOptions
+                        commentId={reply.id}
+                        commentUserId={reply.userId}
+                        postAuthorId={reply.post.authorId}
+                        onDelete={() => handleDeleteComment(reply.id)}
+                    />
                 </div>
                 
                 {/* Reply form for this reply */}
@@ -205,10 +227,12 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                 password: null,
                 createdAt: new Date(),
                 updatedAt: new Date(),
-
             },
             likes: [],
             replies: [], // Add empty replies array
+            post: {
+                authorId: optimisticComments.length > 0 ? optimisticComments[0].post.authorId : user.id
+            }
         }
         startTransition(() => {
             addOptimisticComments(tempComment)
@@ -256,6 +280,9 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
             },
             likes: [],
             replies: [], // Add empty replies array
+            post: {
+                authorId: parentComment.post.authorId
+            }
         }
         
         startTransition(() => {
@@ -280,6 +307,12 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
             mainInputRef.current?.focus()
         }, 0)
     }
+
+    const handleDeleteComment = (commentId: number) => {
+        startTransition(() => {
+            addOptimisticComments({ type: 'delete', id: commentId });
+        });
+    };
 
     const handleReplyEmojiSelect = (emoji: any) => {
         setReplyText(prev => prev + emoji.native)
@@ -352,8 +385,13 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                                 onReply={() => handleReply(comment.id)}
                             />
                         </div>
-                        {/* More Icon */}
-                        <Image src="/more.png" alt="" width={16} height={16} className="w-4 h-4 cursor-pointer icon-primary" />
+                        {/* Comment Options */}
+                        <CommentOptions
+                            commentId={comment.id}
+                            commentUserId={comment.userId}
+                            postAuthorId={comment.post.authorId}
+                            onDelete={() => handleDeleteComment(comment.id)}
+                        />
                     </div>
 
                     {/* Reply Form for main comment */}

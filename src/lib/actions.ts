@@ -177,3 +177,47 @@ export const addComment = async (postId: number, desc: string, parentId?: number
     throw new Error("Failed to add comment");
   }
 };
+
+export const deleteComment = async (commentId: number) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+  
+  try {
+    // First, check if the user is authorized to delete this comment
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      include: {
+        post: {
+          select: {
+            authorId: true
+          }
+        }
+      }
+    });
+
+    if (!comment) {
+      throw new Error("Comment not found");
+    }
+
+    // Check if user is the comment author or the post author
+    const isCommentAuthor = comment.userId === userId;
+    const isPostAuthor = comment.post.authorId === userId;
+
+    if (!isCommentAuthor && !isPostAuthor) {
+      throw new Error("Not authorized to delete this comment");
+    }
+
+    // Delete the comment (this will cascade delete all replies due to schema)
+    await prisma.comment.delete({
+      where: { id: commentId }
+    });
+
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw new Error("Failed to delete comment");
+  }
+};
