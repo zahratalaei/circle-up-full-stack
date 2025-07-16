@@ -119,11 +119,50 @@ export const switchLike = async ({ postId, commentId }: SwitchLikeArgs) => {
   if (!userId) {
     throw new Error("User not authenticated");
   }
-  const filter = { userId, postId, commentId };
+
+  // Validate postId and commentId
+  if (!postId || postId <= 0) {
+    throw new Error("Invalid post ID");
+  }
+  
+  if (commentId !== null && commentId !== undefined && commentId <= 0) {
+    throw new Error("Invalid comment ID");
+  }
+
   try {
+    // Check if the post exists
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      select: { id: true }
+    });
+    
+    if (!post) {
+      throw new Error("Post not found");
+    }
+
+    // If commentId is provided, check if the comment exists
+    if (commentId !== null && commentId !== undefined) {
+      const comment = await prisma.comment.findUnique({
+        where: { id: commentId },
+        select: { id: true }
+      });
+      
+      if (!comment) {
+        throw new Error("Comment not found");
+      }
+    }
+
+    // Set up the filter with proper null handling
+    const filter = { 
+      userId, 
+      postId, 
+      commentId: commentId || null 
+    };
+
     const existingLike = await prisma.like.findFirst({
       where: filter,
     });
+    
     if (existingLike) {
       // If the like exists, delete it
       await prisma.like.delete({
@@ -138,16 +177,33 @@ export const switchLike = async ({ postId, commentId }: SwitchLikeArgs) => {
       });
     }
 
-    const likeCount = await prisma.like.count({ where: { postId, commentId } });
+    const likeCount = await prisma.like.count({ 
+      where: { 
+        postId, 
+        commentId: commentId || null 
+      } 
+    });
+    
     revalidatePath("/");
-     return {
-    postId,
-    commentId,
-    likeCount,
-    isLiked: !existingLike,   // true if we just created it
-  };
+    return {
+      postId,
+      commentId,
+      likeCount,
+      isLiked: !existingLike,   // true if we just created it
+    };
   } catch (error) {
     console.error("Error switching like:", error);
+    
+    // Provide more specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes("Foreign key constraint")) {
+        throw new Error("Invalid reference: Post or comment may not exist");
+      }
+      if (error.message.includes("Post not found") || error.message.includes("Comment not found")) {
+        throw error;
+      }
+    }
+    
     throw new Error("Failed to switch like");
   }
 };
