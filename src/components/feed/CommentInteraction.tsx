@@ -5,7 +5,12 @@ import { LikeState } from "./PostInteraction"
 import { switchLike } from "@/lib/actions"
 type Props = {}
 
-const CommentInteraction = ({ postId, commentId, likes }: { postId: number, commentId: number, likes: (string | null)[] }) => {
+const CommentInteraction = ({ postId, commentId, likes, onReply }: { 
+    postId: number, 
+    commentId: number, 
+    likes: (string | null)[], 
+    onReply?: () => void
+}) => {
 
     const { userId } = useAuth()
     const [likeState, setLikeState] = useState<LikeState>({ likeCount: likes.length, isLiked: userId ? likes.includes(userId) : false });
@@ -44,7 +49,12 @@ const CommentInteraction = ({ postId, commentId, likes }: { postId: number, comm
                 <span className='text-gray-300'>|</span>
                 <span className='text-gray-500'>{optimisticLike.likeCount} <span className="hidden md:inline"> Likes</span>{" "}</span>
             </div>
-            <div>Reply</div>
+            <div 
+                className="cursor-pointer hover:text-primary transition-colors"
+                onClick={() => onReply && onReply()}
+            >
+                Reply
+            </div>
         </div>
     )
 }

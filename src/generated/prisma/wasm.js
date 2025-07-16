@@ -163,7 +163,8 @@ exports.Prisma.CommentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   postId: 'postId',
-  userId: 'userId'
+  userId: 'userId',
+  parentId: 'parentId'
 };
 
 exports.Prisma.RelationshipScalarFieldEnum = {

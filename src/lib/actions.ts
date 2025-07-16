@@ -152,7 +152,7 @@ export const switchLike = async ({ postId, commentId }: SwitchLikeArgs) => {
   }
 };
 
-export const addComment = async (postId: number, desc: string) => {
+export const addComment = async (postId: number, desc: string, parentId?: number) => {
   const { userId } = await auth();
   if (!userId) {
     throw new Error("User not authenticated");
@@ -163,9 +163,11 @@ export const addComment = async (postId: number, desc: string) => {
         postId,
         userId,
         content: desc,
+        parentId: parentId || null,
       },
       include: {
         user: true,
+        likes: true,
       },
     });
     revalidatePath('/')
