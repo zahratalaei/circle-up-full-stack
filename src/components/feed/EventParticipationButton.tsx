@@ -58,10 +58,10 @@ const EventParticipationButton = ({
         <button
           onClick={() => handleToggleParticipation("INTERESTED")}
           disabled={isLoading}
-          className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
             isInterested
-              ? "bg-yellow-100 text-yellow-800 border border-yellow-300"
-              : "bg-gray-100 text-gray-600 hover:bg-yellow-50 border border-gray-300"
+              ? "bg-primary text-white hover:bg-yellow-600"
+              : "bg-white text-gray-600 hover:bg-primary hover:text-white border border-gray-300"
           }`}
         >
           <span>⭐</span>
@@ -71,10 +71,10 @@ const EventParticipationButton = ({
         <button
           onClick={() => handleToggleParticipation("GOING")}
           disabled={isLoading}
-          className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium transition-colors ${
+          className={`flex items-center gap-2 px-3 py-1 rounded-lg text-sm font-medium transition-colors ${
             isGoing
-              ? "bg-green-100 text-green-800 border border-green-300"
-              : "bg-gray-100 text-gray-600 hover:bg-green-50 border border-gray-300"
+              ? "bg-primary text-white hover:bg-yellow-600"
+              : "bg-white text-gray-600 hover:bg-primary hover:text-white border border-gray-300"
           }`}
         >
           <span>✓</span>

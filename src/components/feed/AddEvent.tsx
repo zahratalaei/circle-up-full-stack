@@ -59,7 +59,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
             <h2 className="text-xl font-semibold">Create Event</h2>
             <button
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+              className="p-1 hover:bg-muted rounded-full transition-colors"
             >
               <X size={20} />
             </button>
@@ -77,7 +77,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                 value={formData.title}
                 onChange={handleInputChange}
                 placeholder="Enter event title"
-                className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 bg-muted border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 required
                 disabled={isSubmitting}
               />
@@ -94,7 +94,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                 onChange={handleInputChange}
                 placeholder="Describe your event..."
                 rows={3}
-                className="w-full p-3 border border-gray-300 rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full p-3 bg-muted border border-secondary rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-primary"
                 disabled={isSubmitting}
               />
             </div>
@@ -112,7 +112,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                     name="date"
                     value={formData.date}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-3 py-3 bg-muted border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     required
                     disabled={isSubmitting}
                   />
@@ -130,7 +130,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                     name="time"
                     value={formData.time}
                     onChange={handleInputChange}
-                    className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full pl-10 pr-3 py-3 bg-muted border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     disabled={isSubmitting}
                   />
                 </div>
@@ -150,7 +150,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                   value={formData.location}
                   onChange={handleInputChange}
                   placeholder="Enter event location"
-                  className="w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full pl-10 pr-3 py-3 bg-muted border border-secondary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   disabled={isSubmitting}
                 />
               </div>
@@ -230,7 +230,7 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
               <button
                 type="submit"
                 disabled={isSubmitting || !formData.title || !formData.date}
-                className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isSubmitting ? "Creating..." : "Create Event"}
               </button>

@@ -136,9 +136,9 @@ const AddPost = () => {
             {/* Event Preview */}
             {selectedEvent && (
                 <div className='mt-4 relative'>
-                    <div className='border border-gray-200 rounded-lg p-4 bg-gray-50'>
+                    <div className='border border-secondary rounded-lg p-4 bg-muted'>
                         <div className='flex items-center justify-between mb-2'>
-                            <h3 className='font-semibold text-gray-800'>Event: {selectedEvent.title}</h3>
+                            <h3 className='font-semibold text-lg text-yellow-950 font-sans'>Event: {selectedEvent.title}</h3>
                             <button 
                                 type='button'
                                 onClick={removeEvent}
