@@ -74,22 +74,22 @@ const AddPost = () => {
             <Image src={user.imageUrl || "/noAvatar.png"} alt="" width={48} height={48} className='w-12 h-12 object-cover rounded-full' />
             {/* Post */}
             <div className='p-2 flex-1 min-w-0'>            {/* Text Input */}
-            <form onSubmit={handleSubmit} className='flex gap-4 items-end'>
-                <div className='flex-1 relative'>
-                    <textarea
-                        placeholder="What's on your mind"
-                        className='w-full bg-muted rounded-lg p-2 pr-8 resize-none'
-                        name='description'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows={3}
-                        disabled={isSubmitting}
-                    />
-                    <div className='absolute bottom-2 right-2'>
-                        <Image src="/emoji.png" alt="" width={16} height={16} className='w-4 h-4 cursor-pointer' />
+                <form onSubmit={handleSubmit} className='flex gap-4 items-end'>
+                    <div className='flex-1 relative'>
+                        <textarea
+                            placeholder="What's on your mind"
+                            className='w-full bg-muted rounded-lg p-2 pr-8 resize-none'
+                            name='description'
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                            rows={3}
+                            disabled={isSubmitting}
+                        />
+                        <div className='absolute bottom-2 right-2'>
+                            <Image src="/emoji.png" alt="" width={16} height={16} className='w-4 h-4 cursor-pointer' />
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
                 {/* Image/Video Preview */}
                 {selectedImage && (
@@ -156,26 +156,35 @@ const AddPost = () => {
                                 folder: "social_media_posts",
                                 showUploadMoreButton: false,
                                 sources: ["local", "url", "camera"],
+                                showAdvancedOptions: true,
+                                cropping: true,
                                 styles: {
                                     palette: {
                                         window: "#F4F2EE",
-                                        windowBorder: "#C7A04C",
-                                        tabIcon: "#C7A04C",
-                                        menuIcons: "#641a0f",
-                                        link: "#C7A04C",
+                                        windowBorder: "#641a0f",
+                                        tabIcon: "#ae8d44",
+                                        inactiveTabIcon: "#641a0f",
+                                        link: "#641a0f",
                                         action: "#C7A04C",
                                         inProgress: "#C7A04C",
                                         complete: "#20B832",
                                         error: "#E63946",
-                                        textDark: "#2d1810",
+                                        textDark: "#641a0f",
                                         textLight: "#FFFFFF",
                                         sourceBg: "#F4F2EE",
-                                        sourceText: "#641a0f",
+                                        // sourceText: "#641a0f",
                                         sourceTextActive: "#C7A04C"
                                     },
                                     frame: {
                                         background: "rgba(0, 0, 0, 0.3)"
-                                    }
+                                    },
+                                    // fonts: {
+                                    //     default: null,
+                                    //     "'Merriweather', serif": {
+                                    //         url: "https://fonts.googleapis.com/css?family=Merriweather",
+                                    //         active: true
+                                    //     }
+                                    // }
                                 }
                             }}
                             onSuccess={(result) => {
@@ -216,18 +225,17 @@ const AddPost = () => {
                                 styles: {
                                     palette: {
                                         window: "#F4F2EE",
-                                        windowBorder: "#C7A04C",
-                                        tabIcon: "#C7A04C",
-                                        menuIcons: "#641a0f",
-                                        link: "#C7A04C",
+                                        windowBorder: "#641a0f",
+                                        tabIcon: "#ae8d44",
+                                        inactiveTabIcon: "#641a0f",
+                                        link: "#641a0f",
                                         action: "#C7A04C",
                                         inProgress: "#C7A04C",
                                         complete: "#20B832",
                                         error: "#E63946",
-                                        textDark: "#2d1810",
+                                        textDark: "#641a0f",
                                         textLight: "#FFFFFF",
                                         sourceBg: "#F4F2EE",
-                                        sourceText: "#641a0f",
                                         sourceTextActive: "#C7A04C"
                                     },
                                     frame: {
@@ -261,17 +269,17 @@ const AddPost = () => {
                             <Image src="/poll.png" alt="" width={20} height={20} />Poll
                         </div>
                     </div>
-                    
+
                     {/* Submit Button - aligned with post options */}
-                    <button 
+                    <button
                         type='button'
                         onClick={handleSubmit}
                         className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                         disabled={isSubmitting || (!description.trim() && !selectedEvent)}
                     >
-                        <SendHorizontal 
-                            size={28} 
-                            color={isSubmitting || (!description.trim() && !selectedEvent) ? "#ccc" : "#905906"}  
+                        <SendHorizontal
+                            size={28}
+                            color={isSubmitting || (!description.trim() && !selectedEvent) ? "#ccc" : "#905906"}
                             strokeWidth={2}
                         />
                     </button>
