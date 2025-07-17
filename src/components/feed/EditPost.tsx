@@ -111,7 +111,33 @@ const EditPost = ({ postId, currentDescription, currentImage, onClose }: EditPos
                   resourceType: "auto",
                   folder: "social_media_posts",
                   showUploadMoreButton: false,
-                  sources: ["local", "url", "camera"]
+                  sources: ["local", "url", "camera"],
+                  showAdvancedOptions: true,
+                  cropping: true,
+                  multiple: false,
+                  clientAllowedFormats: ["jpg", "jpeg", "png", "gif", "webp", "mp4", "mov", "avi", "webm"],
+                  maxImageFileSize: 10000000, // 10MB
+                  maxFileSize: 50000000, // 50MB for videos
+                  styles: {
+                    palette: {
+                      window: "#F4F2EE",
+                      windowBorder: "#641a0f",
+                      tabIcon: "#ae8d44",
+                      inactiveTabIcon: "#641a0f",
+                      link: "#641a0f",
+                      action: "#C7A04C",
+                      inProgress: "#C7A04C",
+                      complete: "#20B832",
+                      error: "#E63946",
+                      textDark: "#641a0f",
+                      textLight: "#FFFFFF",
+                      sourceBg: "#F4F2EE",
+                      sourceTextActive: "#C7A04C"
+                    },
+                    frame: {
+                      background: "rgba(0, 0, 0, 0.3)"
+                    }
+                  }
                 }}
                 onSuccess={(result) => {
                   if (typeof result.info === 'object' && result.info && 'secure_url' in result.info) {
@@ -127,19 +153,26 @@ const EditPost = ({ postId, currentDescription, currentImage, onClose }: EditPos
                   setIsUploading(false);
                 }}
               >
-                {({ open }) => (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsUploading(true);
-                      open();
-                    }}
-                    className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                  >
-                    <ImageIcon size={16} />
-                    {isUploading ? "Uploading..." : "Change Photo/Video"}
-                  </button>
-                )}
+                {({ open }) => {
+                  if (!open) {
+                    console.error("Cloudinary upload widget: open function not available");
+                    return null;
+                  }
+                  
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsUploading(true);
+                        open();
+                      }}
+                      className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      <ImageIcon size={16} />
+                      {isUploading ? "Uploading..." : "Change Photo/Video"}
+                    </button>
+                  );
+                }}
               </CldUploadWidget>
             </div>
 

@@ -13,6 +13,8 @@ const AddPost = () => {
     const [description, setDescription] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedImage, setSelectedImage] = useState<string | null>(null);
+    const [imagePublicId, setImagePublicId] = useState<string | null>(null);
+    const [selectedEffect, setSelectedEffect] = useState<string>("none");
     const [isUploading, setIsUploading] = useState(false);
     const [showEventModal, setShowEventModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState<any>(null);
@@ -29,7 +31,9 @@ const AddPost = () => {
             const formData = new FormData();
             formData.append("description", description);
             if (selectedImage) {
-                formData.append("image", selectedImage);
+                // Use the transformed image URL for submission
+                const finalImageUrl = getTransformedImageUrl();
+                formData.append("image", finalImageUrl || selectedImage);
             }
 
             let result;
@@ -42,6 +46,8 @@ const AddPost = () => {
             if (result.success) {
                 setDescription(""); // Clear the form after successful submission
                 setSelectedImage(null); // Clear the image after successful submission
+                setImagePublicId(null); // Clear the public ID
+                setSelectedEffect("none"); // Reset effect
                 setSelectedEvent(null); // Clear the selected event
             }
         } catch (error) {
@@ -53,6 +59,38 @@ const AddPost = () => {
 
     const handleRemoveImage = () => {
         setSelectedImage(null);
+        setImagePublicId(null);
+        setSelectedEffect("none");
+    };
+
+    const effects = [
+        { label: "Original", value: "none" },
+        { label: "Grayscale", value: "e_grayscale" },
+        { label: "Sepia", value: "e_sepia" },
+        { label: "Blur", value: "e_blur:300" },
+        { label: "Pixelate", value: "e_pixelate:15" },
+        { label: "Oil Paint", value: "e_oil_paint" },
+        { label: "Cartoonify", value: "e_cartoonify" },
+        { label: "Vignette", value: "e_vignette" },
+        { label: "Sharpen", value: "e_sharpen" },
+        { label: "Brightness", value: "e_brightness:40" },
+        { label: "Contrast", value: "e_contrast:40" },
+        { label: "Saturation", value: "e_saturation:60" },
+        { label: "Art: Athena", value: "e_art:athena" },
+        { label: "Art: Hokusai", value: "e_art:hokusai" },
+        { label: "Art: Peacock", value: "e_art:peacock" },
+        { label: "Art: Zorro", value: "e_art:zorro" },
+    ];
+
+    const getTransformedImageUrl = (effect = selectedEffect) => {
+        if (!imagePublicId) return selectedImage;
+        if (effect === "none") return selectedImage;
+        
+        // Extract cloud name from the original URL
+        const cloudName = selectedImage?.match(/https:\/\/res\.cloudinary\.com\/([^\/]+)/)?.[1];
+        if (!cloudName) return selectedImage;
+        
+        return `https://res.cloudinary.com/${cloudName}/image/upload/${effect}/${imagePublicId}`;
     };
 
     const handleEventCreated = (event: any) => {
@@ -103,13 +141,51 @@ const AddPost = () => {
                                 style={{ maxHeight: '400px' }}
                             />
                         ) : (
-                            <Image
-                                src={selectedImage}
-                                alt="Selected"
-                                width={400}
-                                height={300}
-                                className='rounded-lg object-cover max-w-full h-auto max-h-96'
-                            />
+                            <div className='space-y-4'>
+                                <Image
+                                    src={getTransformedImageUrl()}
+                                    alt="Selected"
+                                    width={400}
+                                    height={300}
+                                    className='rounded-lg object-cover max-w-full h-auto max-h-96'
+                                />
+                                
+                                {/* Effect Preview Grid - Only show for images */}
+                                {imagePublicId && (
+                                    <div className='bg-gray-50 p-4 rounded-lg border'>
+                                        <h3 className='text-sm font-medium text-gray-700 mb-3'>Choose an Effect:</h3>
+                                        <div className='grid grid-cols-4 gap-3 max-h-64 overflow-y-auto'>
+                                            {effects.map((effect) => (
+                                                <div
+                                                    key={effect.value}
+                                                    className={`cursor-pointer rounded-lg border-2 p-1 transition-all ${
+                                                        selectedEffect === effect.value
+                                                            ? 'border-amber-500 bg-amber-50'
+                                                            : 'border-gray-200 hover:border-gray-300'
+                                                    }`}
+                                                    onClick={() => setSelectedEffect(effect.value)}
+                                                >
+                                                    <div className='relative'>
+                                                        <Image
+                                                            src={getTransformedImageUrl(effect.value)}
+                                                            alt={effect.label}
+                                                            width={80}
+                                                            height={80}
+                                                            className='w-full h-16 object-cover rounded'
+                                                        />
+                                                        <div className='absolute bottom-0 left-0 right-0 bg-black bg-opacity-60 text-white text-xs p-1 rounded-b'>
+                                                            {effect.label}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <p className='text-xs text-gray-500 mt-2'>
+                                            Selected: {effects.find(e => e.value === selectedEffect)?.label}
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
                         )}
                         <button
                             type='button'
@@ -189,7 +265,10 @@ const AddPost = () => {
                             }}
                             onSuccess={(result) => {
                                 if (typeof result.info === 'object' && result.info?.secure_url) {
+                                    console.log("Upload result:", result.info); // Debug log
                                     setSelectedImage(result.info.secure_url);
+                                    setImagePublicId(result.info.public_id);
+                                    setSelectedEffect("none"); // Reset effect when new image is uploaded
                                     setIsUploading(false);
                                 }
                             }}
@@ -246,6 +325,10 @@ const AddPost = () => {
                             onSuccess={(result) => {
                                 if (typeof result.info === 'object' && result.info?.secure_url) {
                                     setSelectedImage(result.info.secure_url);
+                                    // Only set publicId for images, not videos
+                                    if (result.info.resource_type === 'image') {
+                                        setImagePublicId(result.info.public_id);
+                                    }
                                 }
                             }}
                             onError={(error) => {

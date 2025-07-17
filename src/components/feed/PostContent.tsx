@@ -14,10 +14,10 @@ export type PostContentProps = {
   commentLikeCount: number;
   commentNumber: number;
 };
-const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, commentNumber}:PostContentProps) => {
+const PostContent = async ({ post, postLikers, postLikeCount, commentLikeCount, commentNumber }: PostContentProps) => {
   // Fetch comments data on the server side
   const comments = await fetchComments(post.id);
- 
+
   return (
     <div className="flex flex-col gap-4">
       {/* User */}
@@ -32,9 +32,9 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
           />
           <span className="font-medium text-sm">{post?.author?.username ?? ""}</span>
         </div>
-        <PostOptions 
-          postId={post.id} 
-          authorId={post.authorId} 
+        <PostOptions
+          postId={post.id}
+          authorId={post.authorId}
           currentDescription={post.description ?? ""}
           currentImage={post.image}
         />
@@ -70,7 +70,7 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
                 />
               </div>
             )}
-            
+
             {/* Event participation buttons */}
             <EventParticipationButton
               eventId={post.event.id}
@@ -79,14 +79,14 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
             />
           </div>
         )}
-        
+
         {post?.image && (
           <div className="w-full min-h-96 relative">
             {/* Check if it's a video */}
             {post.image.includes('.mp4') || post.image.includes('.mov') || post.image.includes('.avi') || post.image.includes('.webm') ? (
-              <video 
-                src={post.image} 
-                controls 
+              <video
+                src={post.image}
+                controls
                 className="w-full h-auto rounded-md"
                 style={{ maxHeight: '600px' }}
                 preload="metadata"
