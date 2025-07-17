@@ -473,3 +473,176 @@ export const addPostWithEvent = async (formData: FormData, eventId: string) => {
     throw new Error("Failed to create post");
   }
 };
+
+export const toggleEventParticipation = async (eventId: number, status: "INTERESTED" | "GOING") => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  if (!eventId || eventId <= 0) {
+    throw new Error("Invalid event ID");
+  }
+
+  try {
+    // Check if the event exists
+    const event = await prisma.event.findUnique({
+      where: { id: eventId },
+      select: { id: true, authorId: true }
+    });
+    
+    if (!event) {
+      throw new Error("Event not found");
+    }
+
+    // Check if user already has participation record
+    const existingParticipation = await prisma.eventParticipation.findUnique({
+      where: {
+        userId_eventId: {
+          userId,
+          eventId
+        }
+      }
+    });
+
+    if (existingParticipation) {
+      if (existingParticipation.status === status) {
+        // If same status, remove participation (toggle off)
+        await prisma.eventParticipation.delete({
+          where: {
+            id: existingParticipation.id
+          }
+        });
+        
+        revalidatePath("/");
+        return { 
+          success: true, 
+          action: "removed", 
+          status: null,
+          eventId,
+          userId 
+        };
+      } else {
+        // Update to new status
+        const updatedParticipation = await prisma.eventParticipation.update({
+          where: {
+            id: existingParticipation.id
+          },
+          data: {
+            status,
+            updatedAt: new Date()
+          }
+        });
+        
+        revalidatePath("/");
+        return { 
+          success: true, 
+          action: "updated", 
+          status: updatedParticipation.status,
+          eventId,
+          userId 
+        };
+      }
+    } else {
+      // Create new participation
+      const newParticipation = await prisma.eventParticipation.create({
+        data: {
+          userId,
+          eventId,
+          status
+        }
+      });
+      
+      revalidatePath("/");
+      return { 
+        success: true, 
+        action: "created", 
+        status: newParticipation.status,
+        eventId,
+        userId 
+      };
+    }
+  } catch (error) {
+    console.error("Error toggling event participation:", error);
+    throw new Error("Failed to toggle event participation");
+  }
+};
+
+export const getUserEventParticipations = async (userId?: string) => {
+  const { userId: currentUserId } = await auth();
+  if (!currentUserId) {
+    throw new Error("User not authenticated");
+  }
+
+  const targetUserId = userId || currentUserId;
+
+  try {
+    const participations = await prisma.eventParticipation.findMany({
+      where: {
+        userId: targetUserId
+      },
+      include: {
+        event: {
+          include: {
+            author: true,
+            _count: {
+              select: {
+                participants: true
+              }
+            }
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    return participations;
+  } catch (error) {
+    console.error("Error getting user event participations:", error);
+    throw new Error("Failed to get user event participations");
+  }
+};
+
+export const getEventParticipants = async (eventId: number) => {
+  const { userId } = await auth();
+  if (!userId) {
+    throw new Error("User not authenticated");
+  }
+
+  try {
+    const participants = await prisma.eventParticipation.findMany({
+      where: {
+        eventId
+      },
+      include: {
+        user: {
+          select: {
+            id: true,
+            username: true,
+            avatar: true,
+            name: true,
+            surname: true
+          }
+        }
+      },
+      orderBy: {
+        createdAt: 'desc'
+      }
+    });
+
+    // Group by status
+    const interested = participants.filter(p => p.status === "INTERESTED");
+    const going = participants.filter(p => p.status === "GOING");
+
+    return {
+      interested,
+      going,
+      total: participants.length
+    };
+  } catch (error) {
+    console.error("Error getting event participants:", error);
+    throw new Error("Failed to get event participants");
+  }
+};

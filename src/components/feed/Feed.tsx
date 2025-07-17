@@ -16,7 +16,30 @@ import prisma from '@/lib/client'
 // }
 export type PostWithAuthor = Post & {
   author: User | null;
-  event: { id: number; title: string; description: string | null; date: Date; time: string | null; location: string | null; image: string | null } | null;
+  event: { 
+    id: number; 
+    title: string; 
+    description: string | null; 
+    date: Date; 
+    time: string | null; 
+    location: string | null; 
+    image: string | null;
+    participants: {
+      id: number;
+      status: string;
+      userId: string;
+      user: {
+        id: string;
+        username: string | null;
+        avatar: string | null;
+        name: string | null;
+        surname: string | null;
+      };
+    }[];
+    _count: {
+      participants: number;
+    };
+  } | null;
   likes: { userId: string | null }[];
   comments: (Comment & { likes: { userId: string | null }[] })[];
   _count: {
@@ -44,7 +67,28 @@ const Feed = async ({ username }: { username?: string }) => {
             date: true,
             time: true,
             location: true,
-            image: true
+            image: true,
+            participants: {
+              select: {
+                id: true,
+                status: true,
+                userId: true,
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    avatar: true,
+                    name: true,
+                    surname: true
+                  }
+                }
+              }
+            },
+            _count: {
+              select: {
+                participants: true
+              }
+            }
           }
         },
         likes: {
@@ -101,7 +145,28 @@ const Feed = async ({ username }: { username?: string }) => {
             date: true,
             time: true,
             location: true,
-            image: true
+            image: true,
+            participants: {
+              select: {
+                id: true,
+                status: true,
+                userId: true,
+                user: {
+                  select: {
+                    id: true,
+                    username: true,
+                    avatar: true,
+                    name: true,
+                    surname: true
+                  }
+                }
+              }
+            },
+            _count: {
+              select: {
+                participants: true
+              }
+            }
           }
         },
         likes: {

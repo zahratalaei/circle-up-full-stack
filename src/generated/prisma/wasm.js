@@ -224,6 +224,15 @@ exports.Prisma.EventScalarFieldEnum = {
   authorId: 'authorId'
 };
 
+exports.Prisma.EventParticipationScalarFieldEnum = {
+  id: 'id',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  status: 'status',
+  userId: 'userId',
+  eventId: 'eventId'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -302,11 +311,20 @@ exports.Prisma.EventOrderByRelevanceFieldEnum = {
   image: 'image',
   authorId: 'authorId'
 };
+
+exports.Prisma.EventParticipationOrderByRelevanceFieldEnum = {
+  userId: 'userId'
+};
 exports.RelationStatus = exports.$Enums.RelationStatus = {
   NONE: 'NONE',
   REQUESTED: 'REQUESTED',
   FOLLOWING: 'FOLLOWING',
   BLOCKED: 'BLOCKED'
+};
+
+exports.EventParticipationStatus = exports.$Enums.EventParticipationStatus = {
+  INTERESTED: 'INTERESTED',
+  GOING: 'GOING'
 };
 
 exports.Prisma.ModelName = {
@@ -319,7 +337,8 @@ exports.Prisma.ModelName = {
   FollowRequest: 'FollowRequest',
   Block: 'Block',
   Story: 'Story',
-  Event: 'Event'
+  Event: 'Event',
+  EventParticipation: 'EventParticipation'
 };
 
 /**

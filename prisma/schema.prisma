@@ -50,6 +50,7 @@ model User {
   events      Event[]
   relations   Relationship[]  @relation("relations_from")
   relatedBy   Relationship[]  @relation("relations_to")
+  eventParticipations EventParticipation[]
 }
 
 model Post {
@@ -159,16 +160,35 @@ model Story {
 }
 
 model Event {
-  id          Int       @id @default(autoincrement())
-  title       String
-  description String?
-  location    String?
-  date        DateTime
-  time        String?
-  image       String?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  authorId    String
-  posts       Post[]
+  id            Int                   @id @default(autoincrement())
+  title         String
+  description   String?
+  location      String?
+  date          DateTime
+  time          String?
+  image         String?
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+  author        User                  @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId      String
+  posts         Post[]
+  participants  EventParticipation[]
+}
+
+model EventParticipation {
+  id        Int                      @id @default(autoincrement())
+  createdAt DateTime                 @default(now())
+  updatedAt DateTime                 @updatedAt
+  status    EventParticipationStatus @default(INTERESTED)
+  user      User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  event     Event                    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  eventId   Int
+
+  @@unique([userId, eventId])
+}
+
+enum EventParticipationStatus {
+  INTERESTED
+  GOING
 }

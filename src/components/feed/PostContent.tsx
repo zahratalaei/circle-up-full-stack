@@ -4,6 +4,7 @@ import { PostWithAuthor } from "./Feed";
 import PostInteractionWrapper from "./PostInteractionWrapper";
 import { fetchComments } from "./fetchComments";
 import PostOptions from "./PostOptions";
+import EventParticipationButton from "./EventParticipationButton";
 
 
 export type PostContentProps = {
@@ -60,7 +61,7 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
               <p className="text-blue-800 text-sm mb-3">{post.event.description}</p>
             )}
             {post.event.image && (
-              <div className="relative w-full h-40 rounded-lg overflow-hidden">
+              <div className="relative w-full h-40 rounded-lg overflow-hidden mb-3">
                 <Image
                   src={post.event.image}
                   alt={post.event.title}
@@ -69,6 +70,13 @@ const PostContent = async ({post, postLikers, postLikeCount, commentLikeCount, c
                 />
               </div>
             )}
+            
+            {/* Event participation buttons */}
+            <EventParticipationButton
+              eventId={post.event.id}
+              participants={post.event.participants}
+              participantCount={post.event._count.participants}
+            />
           </div>
         )}
         

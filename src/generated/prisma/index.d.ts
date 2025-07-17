@@ -63,6 +63,11 @@ export type Story = $Result.DefaultSelection<Prisma.$StoryPayload>
  * 
  */
 export type Event = $Result.DefaultSelection<Prisma.$EventPayload>
+/**
+ * Model EventParticipation
+ * 
+ */
+export type EventParticipation = $Result.DefaultSelection<Prisma.$EventParticipationPayload>
 
 /**
  * Enums
@@ -77,11 +82,23 @@ export namespace $Enums {
 
 export type RelationStatus = (typeof RelationStatus)[keyof typeof RelationStatus]
 
+
+export const EventParticipationStatus: {
+  INTERESTED: 'INTERESTED',
+  GOING: 'GOING'
+};
+
+export type EventParticipationStatus = (typeof EventParticipationStatus)[keyof typeof EventParticipationStatus]
+
 }
 
 export type RelationStatus = $Enums.RelationStatus
 
 export const RelationStatus: typeof $Enums.RelationStatus
+
+export type EventParticipationStatus = $Enums.EventParticipationStatus
+
+export const EventParticipationStatus: typeof $Enums.EventParticipationStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -307,6 +324,16 @@ export class PrismaClient<
     * ```
     */
   get event(): Prisma.EventDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.eventParticipation`: Exposes CRUD operations for the **EventParticipation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more EventParticipations
+    * const eventParticipations = await prisma.eventParticipation.findMany()
+    * ```
+    */
+  get eventParticipation(): Prisma.EventParticipationDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -756,7 +783,8 @@ export namespace Prisma {
     FollowRequest: 'FollowRequest',
     Block: 'Block',
     Story: 'Story',
-    Event: 'Event'
+    Event: 'Event',
+    EventParticipation: 'EventParticipation'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -775,7 +803,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "user" | "post" | "like" | "comment" | "relationship" | "follower" | "followRequest" | "block" | "story" | "event"
+      modelProps: "user" | "post" | "like" | "comment" | "relationship" | "follower" | "followRequest" | "block" | "story" | "event" | "eventParticipation"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1439,6 +1467,72 @@ export namespace Prisma {
           }
         }
       }
+      EventParticipation: {
+        payload: Prisma.$EventParticipationPayload<ExtArgs>
+        fields: Prisma.EventParticipationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.EventParticipationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.EventParticipationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          findFirst: {
+            args: Prisma.EventParticipationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.EventParticipationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          findMany: {
+            args: Prisma.EventParticipationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>[]
+          }
+          create: {
+            args: Prisma.EventParticipationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          createMany: {
+            args: Prisma.EventParticipationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.EventParticipationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          update: {
+            args: Prisma.EventParticipationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          deleteMany: {
+            args: Prisma.EventParticipationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.EventParticipationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.EventParticipationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$EventParticipationPayload>
+          }
+          aggregate: {
+            args: Prisma.EventParticipationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateEventParticipation>
+          }
+          groupBy: {
+            args: Prisma.EventParticipationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<EventParticipationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.EventParticipationCountArgs<ExtArgs>
+            result: $Utils.Optional<EventParticipationCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1533,6 +1627,7 @@ export namespace Prisma {
     block?: BlockOmit
     story?: StoryOmit
     event?: EventOmit
+    eventParticipation?: EventParticipationOmit
   }
 
   /* Types for Logging */
@@ -1640,6 +1735,7 @@ export namespace Prisma {
     events: number
     relations: number
     relatedBy: number
+    eventParticipations: number
   }
 
   export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -1656,6 +1752,7 @@ export namespace Prisma {
     events?: boolean | UserCountOutputTypeCountEventsArgs
     relations?: boolean | UserCountOutputTypeCountRelationsArgs
     relatedBy?: boolean | UserCountOutputTypeCountRelatedByArgs
+    eventParticipations?: boolean | UserCountOutputTypeCountEventParticipationsArgs
   }
 
   // Custom InputTypes
@@ -1760,6 +1857,13 @@ export namespace Prisma {
     where?: RelationshipWhereInput
   }
 
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountEventParticipationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventParticipationWhereInput
+  }
+
 
   /**
    * Count Type PostCountOutputType
@@ -1847,10 +1951,12 @@ export namespace Prisma {
 
   export type EventCountOutputType = {
     posts: number
+    participants: number
   }
 
   export type EventCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     posts?: boolean | EventCountOutputTypeCountPostsArgs
+    participants?: boolean | EventCountOutputTypeCountParticipantsArgs
   }
 
   // Custom InputTypes
@@ -1869,6 +1975,13 @@ export namespace Prisma {
    */
   export type EventCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PostWhereInput
+  }
+
+  /**
+   * EventCountOutputType without action
+   */
+  export type EventCountOutputTypeCountParticipantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventParticipationWhereInput
   }
 
 
@@ -2133,6 +2246,7 @@ export namespace Prisma {
     events?: boolean | User$eventsArgs<ExtArgs>
     relations?: boolean | User$relationsArgs<ExtArgs>
     relatedBy?: boolean | User$relatedByArgs<ExtArgs>
+    eventParticipations?: boolean | User$eventParticipationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["user"]>
 
@@ -2171,6 +2285,7 @@ export namespace Prisma {
     events?: boolean | User$eventsArgs<ExtArgs>
     relations?: boolean | User$relationsArgs<ExtArgs>
     relatedBy?: boolean | User$relatedByArgs<ExtArgs>
+    eventParticipations?: boolean | User$eventParticipationsArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -2190,6 +2305,7 @@ export namespace Prisma {
       events: Prisma.$EventPayload<ExtArgs>[]
       relations: Prisma.$RelationshipPayload<ExtArgs>[]
       relatedBy: Prisma.$RelationshipPayload<ExtArgs>[]
+      eventParticipations: Prisma.$EventParticipationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2560,6 +2676,7 @@ export namespace Prisma {
     events<T extends User$eventsArgs<ExtArgs> = {}>(args?: Subset<T, User$eventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     relations<T extends User$relationsArgs<ExtArgs> = {}>(args?: Subset<T, User$relationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RelationshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     relatedBy<T extends User$relatedByArgs<ExtArgs> = {}>(args?: Subset<T, User$relatedByArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$RelationshipPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    eventParticipations<T extends User$eventParticipationsArgs<ExtArgs> = {}>(args?: Subset<T, User$eventParticipationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3256,6 +3373,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: RelationshipScalarFieldEnum | RelationshipScalarFieldEnum[]
+  }
+
+  /**
+   * User.eventParticipations
+   */
+  export type User$eventParticipationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    where?: EventParticipationWhereInput
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    cursor?: EventParticipationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventParticipationScalarFieldEnum | EventParticipationScalarFieldEnum[]
   }
 
   /**
@@ -11534,6 +11675,7 @@ export namespace Prisma {
     authorId?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     posts?: boolean | Event$postsArgs<ExtArgs>
+    participants?: boolean | Event$participantsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["event"]>
 
@@ -11556,6 +11698,7 @@ export namespace Prisma {
   export type EventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     author?: boolean | UserDefaultArgs<ExtArgs>
     posts?: boolean | Event$postsArgs<ExtArgs>
+    participants?: boolean | Event$participantsArgs<ExtArgs>
     _count?: boolean | EventCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -11564,6 +11707,7 @@ export namespace Prisma {
     objects: {
       author: Prisma.$UserPayload<ExtArgs>
       posts: Prisma.$PostPayload<ExtArgs>[]
+      participants: Prisma.$EventParticipationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -11918,6 +12062,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     posts<T extends Event$postsArgs<ExtArgs> = {}>(args?: Subset<T, Event$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    participants<T extends Event$participantsArgs<ExtArgs> = {}>(args?: Subset<T, Event$participantsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12324,6 +12469,30 @@ export namespace Prisma {
   }
 
   /**
+   * Event.participants
+   */
+  export type Event$participantsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    where?: EventParticipationWhereInput
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    cursor?: EventParticipationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: EventParticipationScalarFieldEnum | EventParticipationScalarFieldEnum[]
+  }
+
+  /**
    * Event without action
    */
   export type EventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -12339,6 +12508,988 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: EventInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model EventParticipation
+   */
+
+  export type AggregateEventParticipation = {
+    _count: EventParticipationCountAggregateOutputType | null
+    _avg: EventParticipationAvgAggregateOutputType | null
+    _sum: EventParticipationSumAggregateOutputType | null
+    _min: EventParticipationMinAggregateOutputType | null
+    _max: EventParticipationMaxAggregateOutputType | null
+  }
+
+  export type EventParticipationAvgAggregateOutputType = {
+    id: number | null
+    eventId: number | null
+  }
+
+  export type EventParticipationSumAggregateOutputType = {
+    id: number | null
+    eventId: number | null
+  }
+
+  export type EventParticipationMinAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.EventParticipationStatus | null
+    userId: string | null
+    eventId: number | null
+  }
+
+  export type EventParticipationMaxAggregateOutputType = {
+    id: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    status: $Enums.EventParticipationStatus | null
+    userId: string | null
+    eventId: number | null
+  }
+
+  export type EventParticipationCountAggregateOutputType = {
+    id: number
+    createdAt: number
+    updatedAt: number
+    status: number
+    userId: number
+    eventId: number
+    _all: number
+  }
+
+
+  export type EventParticipationAvgAggregateInputType = {
+    id?: true
+    eventId?: true
+  }
+
+  export type EventParticipationSumAggregateInputType = {
+    id?: true
+    eventId?: true
+  }
+
+  export type EventParticipationMinAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+    userId?: true
+    eventId?: true
+  }
+
+  export type EventParticipationMaxAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+    userId?: true
+    eventId?: true
+  }
+
+  export type EventParticipationCountAggregateInputType = {
+    id?: true
+    createdAt?: true
+    updatedAt?: true
+    status?: true
+    userId?: true
+    eventId?: true
+    _all?: true
+  }
+
+  export type EventParticipationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventParticipation to aggregate.
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventParticipations to fetch.
+     */
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: EventParticipationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventParticipations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventParticipations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned EventParticipations
+    **/
+    _count?: true | EventParticipationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: EventParticipationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: EventParticipationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: EventParticipationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: EventParticipationMaxAggregateInputType
+  }
+
+  export type GetEventParticipationAggregateType<T extends EventParticipationAggregateArgs> = {
+        [P in keyof T & keyof AggregateEventParticipation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateEventParticipation[P]>
+      : GetScalarType<T[P], AggregateEventParticipation[P]>
+  }
+
+
+
+
+  export type EventParticipationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: EventParticipationWhereInput
+    orderBy?: EventParticipationOrderByWithAggregationInput | EventParticipationOrderByWithAggregationInput[]
+    by: EventParticipationScalarFieldEnum[] | EventParticipationScalarFieldEnum
+    having?: EventParticipationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: EventParticipationCountAggregateInputType | true
+    _avg?: EventParticipationAvgAggregateInputType
+    _sum?: EventParticipationSumAggregateInputType
+    _min?: EventParticipationMinAggregateInputType
+    _max?: EventParticipationMaxAggregateInputType
+  }
+
+  export type EventParticipationGroupByOutputType = {
+    id: number
+    createdAt: Date
+    updatedAt: Date
+    status: $Enums.EventParticipationStatus
+    userId: string
+    eventId: number
+    _count: EventParticipationCountAggregateOutputType | null
+    _avg: EventParticipationAvgAggregateOutputType | null
+    _sum: EventParticipationSumAggregateOutputType | null
+    _min: EventParticipationMinAggregateOutputType | null
+    _max: EventParticipationMaxAggregateOutputType | null
+  }
+
+  type GetEventParticipationGroupByPayload<T extends EventParticipationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<EventParticipationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof EventParticipationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], EventParticipationGroupByOutputType[P]>
+            : GetScalarType<T[P], EventParticipationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type EventParticipationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    userId?: boolean
+    eventId?: boolean
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["eventParticipation"]>
+
+
+
+  export type EventParticipationSelectScalar = {
+    id?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    status?: boolean
+    userId?: boolean
+    eventId?: boolean
+  }
+
+  export type EventParticipationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "status" | "userId" | "eventId", ExtArgs["result"]["eventParticipation"]>
+  export type EventParticipationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    event?: boolean | EventDefaultArgs<ExtArgs>
+  }
+
+  export type $EventParticipationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "EventParticipation"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      event: Prisma.$EventPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      createdAt: Date
+      updatedAt: Date
+      status: $Enums.EventParticipationStatus
+      userId: string
+      eventId: number
+    }, ExtArgs["result"]["eventParticipation"]>
+    composites: {}
+  }
+
+  type EventParticipationGetPayload<S extends boolean | null | undefined | EventParticipationDefaultArgs> = $Result.GetResult<Prisma.$EventParticipationPayload, S>
+
+  type EventParticipationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<EventParticipationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: EventParticipationCountAggregateInputType | true
+    }
+
+  export interface EventParticipationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['EventParticipation'], meta: { name: 'EventParticipation' } }
+    /**
+     * Find zero or one EventParticipation that matches the filter.
+     * @param {EventParticipationFindUniqueArgs} args - Arguments to find a EventParticipation
+     * @example
+     * // Get one EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends EventParticipationFindUniqueArgs>(args: SelectSubset<T, EventParticipationFindUniqueArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one EventParticipation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {EventParticipationFindUniqueOrThrowArgs} args - Arguments to find a EventParticipation
+     * @example
+     * // Get one EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends EventParticipationFindUniqueOrThrowArgs>(args: SelectSubset<T, EventParticipationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventParticipation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationFindFirstArgs} args - Arguments to find a EventParticipation
+     * @example
+     * // Get one EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends EventParticipationFindFirstArgs>(args?: SelectSubset<T, EventParticipationFindFirstArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first EventParticipation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationFindFirstOrThrowArgs} args - Arguments to find a EventParticipation
+     * @example
+     * // Get one EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends EventParticipationFindFirstOrThrowArgs>(args?: SelectSubset<T, EventParticipationFindFirstOrThrowArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more EventParticipations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all EventParticipations
+     * const eventParticipations = await prisma.eventParticipation.findMany()
+     * 
+     * // Get first 10 EventParticipations
+     * const eventParticipations = await prisma.eventParticipation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const eventParticipationWithIdOnly = await prisma.eventParticipation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends EventParticipationFindManyArgs>(args?: SelectSubset<T, EventParticipationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a EventParticipation.
+     * @param {EventParticipationCreateArgs} args - Arguments to create a EventParticipation.
+     * @example
+     * // Create one EventParticipation
+     * const EventParticipation = await prisma.eventParticipation.create({
+     *   data: {
+     *     // ... data to create a EventParticipation
+     *   }
+     * })
+     * 
+     */
+    create<T extends EventParticipationCreateArgs>(args: SelectSubset<T, EventParticipationCreateArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many EventParticipations.
+     * @param {EventParticipationCreateManyArgs} args - Arguments to create many EventParticipations.
+     * @example
+     * // Create many EventParticipations
+     * const eventParticipation = await prisma.eventParticipation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends EventParticipationCreateManyArgs>(args?: SelectSubset<T, EventParticipationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a EventParticipation.
+     * @param {EventParticipationDeleteArgs} args - Arguments to delete one EventParticipation.
+     * @example
+     * // Delete one EventParticipation
+     * const EventParticipation = await prisma.eventParticipation.delete({
+     *   where: {
+     *     // ... filter to delete one EventParticipation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends EventParticipationDeleteArgs>(args: SelectSubset<T, EventParticipationDeleteArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one EventParticipation.
+     * @param {EventParticipationUpdateArgs} args - Arguments to update one EventParticipation.
+     * @example
+     * // Update one EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends EventParticipationUpdateArgs>(args: SelectSubset<T, EventParticipationUpdateArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more EventParticipations.
+     * @param {EventParticipationDeleteManyArgs} args - Arguments to filter EventParticipations to delete.
+     * @example
+     * // Delete a few EventParticipations
+     * const { count } = await prisma.eventParticipation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends EventParticipationDeleteManyArgs>(args?: SelectSubset<T, EventParticipationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more EventParticipations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many EventParticipations
+     * const eventParticipation = await prisma.eventParticipation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends EventParticipationUpdateManyArgs>(args: SelectSubset<T, EventParticipationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one EventParticipation.
+     * @param {EventParticipationUpsertArgs} args - Arguments to update or create a EventParticipation.
+     * @example
+     * // Update or create a EventParticipation
+     * const eventParticipation = await prisma.eventParticipation.upsert({
+     *   create: {
+     *     // ... data to create a EventParticipation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the EventParticipation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends EventParticipationUpsertArgs>(args: SelectSubset<T, EventParticipationUpsertArgs<ExtArgs>>): Prisma__EventParticipationClient<$Result.GetResult<Prisma.$EventParticipationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of EventParticipations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationCountArgs} args - Arguments to filter EventParticipations to count.
+     * @example
+     * // Count the number of EventParticipations
+     * const count = await prisma.eventParticipation.count({
+     *   where: {
+     *     // ... the filter for the EventParticipations we want to count
+     *   }
+     * })
+    **/
+    count<T extends EventParticipationCountArgs>(
+      args?: Subset<T, EventParticipationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], EventParticipationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a EventParticipation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends EventParticipationAggregateArgs>(args: Subset<T, EventParticipationAggregateArgs>): Prisma.PrismaPromise<GetEventParticipationAggregateType<T>>
+
+    /**
+     * Group by EventParticipation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {EventParticipationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends EventParticipationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: EventParticipationGroupByArgs['orderBy'] }
+        : { orderBy?: EventParticipationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, EventParticipationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetEventParticipationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the EventParticipation model
+   */
+  readonly fields: EventParticipationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for EventParticipation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__EventParticipationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    event<T extends EventDefaultArgs<ExtArgs> = {}>(args?: Subset<T, EventDefaultArgs<ExtArgs>>): Prisma__EventClient<$Result.GetResult<Prisma.$EventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the EventParticipation model
+   */
+  interface EventParticipationFieldRefs {
+    readonly id: FieldRef<"EventParticipation", 'Int'>
+    readonly createdAt: FieldRef<"EventParticipation", 'DateTime'>
+    readonly updatedAt: FieldRef<"EventParticipation", 'DateTime'>
+    readonly status: FieldRef<"EventParticipation", 'EventParticipationStatus'>
+    readonly userId: FieldRef<"EventParticipation", 'String'>
+    readonly eventId: FieldRef<"EventParticipation", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * EventParticipation findUnique
+   */
+  export type EventParticipationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter, which EventParticipation to fetch.
+     */
+    where: EventParticipationWhereUniqueInput
+  }
+
+  /**
+   * EventParticipation findUniqueOrThrow
+   */
+  export type EventParticipationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter, which EventParticipation to fetch.
+     */
+    where: EventParticipationWhereUniqueInput
+  }
+
+  /**
+   * EventParticipation findFirst
+   */
+  export type EventParticipationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter, which EventParticipation to fetch.
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventParticipations to fetch.
+     */
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventParticipations.
+     */
+    cursor?: EventParticipationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventParticipations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventParticipations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventParticipations.
+     */
+    distinct?: EventParticipationScalarFieldEnum | EventParticipationScalarFieldEnum[]
+  }
+
+  /**
+   * EventParticipation findFirstOrThrow
+   */
+  export type EventParticipationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter, which EventParticipation to fetch.
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventParticipations to fetch.
+     */
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for EventParticipations.
+     */
+    cursor?: EventParticipationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventParticipations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventParticipations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of EventParticipations.
+     */
+    distinct?: EventParticipationScalarFieldEnum | EventParticipationScalarFieldEnum[]
+  }
+
+  /**
+   * EventParticipation findMany
+   */
+  export type EventParticipationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter, which EventParticipations to fetch.
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of EventParticipations to fetch.
+     */
+    orderBy?: EventParticipationOrderByWithRelationInput | EventParticipationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing EventParticipations.
+     */
+    cursor?: EventParticipationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` EventParticipations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` EventParticipations.
+     */
+    skip?: number
+    distinct?: EventParticipationScalarFieldEnum | EventParticipationScalarFieldEnum[]
+  }
+
+  /**
+   * EventParticipation create
+   */
+  export type EventParticipationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a EventParticipation.
+     */
+    data: XOR<EventParticipationCreateInput, EventParticipationUncheckedCreateInput>
+  }
+
+  /**
+   * EventParticipation createMany
+   */
+  export type EventParticipationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many EventParticipations.
+     */
+    data: EventParticipationCreateManyInput | EventParticipationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * EventParticipation update
+   */
+  export type EventParticipationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a EventParticipation.
+     */
+    data: XOR<EventParticipationUpdateInput, EventParticipationUncheckedUpdateInput>
+    /**
+     * Choose, which EventParticipation to update.
+     */
+    where: EventParticipationWhereUniqueInput
+  }
+
+  /**
+   * EventParticipation updateMany
+   */
+  export type EventParticipationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update EventParticipations.
+     */
+    data: XOR<EventParticipationUpdateManyMutationInput, EventParticipationUncheckedUpdateManyInput>
+    /**
+     * Filter which EventParticipations to update
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * Limit how many EventParticipations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventParticipation upsert
+   */
+  export type EventParticipationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the EventParticipation to update in case it exists.
+     */
+    where: EventParticipationWhereUniqueInput
+    /**
+     * In case the EventParticipation found by the `where` argument doesn't exist, create a new EventParticipation with this data.
+     */
+    create: XOR<EventParticipationCreateInput, EventParticipationUncheckedCreateInput>
+    /**
+     * In case the EventParticipation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<EventParticipationUpdateInput, EventParticipationUncheckedUpdateInput>
+  }
+
+  /**
+   * EventParticipation delete
+   */
+  export type EventParticipationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
+    /**
+     * Filter which EventParticipation to delete.
+     */
+    where: EventParticipationWhereUniqueInput
+  }
+
+  /**
+   * EventParticipation deleteMany
+   */
+  export type EventParticipationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which EventParticipations to delete
+     */
+    where?: EventParticipationWhereInput
+    /**
+     * Limit how many EventParticipations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * EventParticipation without action
+   */
+  export type EventParticipationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the EventParticipation
+     */
+    select?: EventParticipationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the EventParticipation
+     */
+    omit?: EventParticipationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: EventParticipationInclude<ExtArgs> | null
   }
 
 
@@ -12490,6 +13641,18 @@ export namespace Prisma {
   export type EventScalarFieldEnum = (typeof EventScalarFieldEnum)[keyof typeof EventScalarFieldEnum]
 
 
+  export const EventParticipationScalarFieldEnum: {
+    id: 'id',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    status: 'status',
+    userId: 'userId',
+    eventId: 'eventId'
+  };
+
+  export type EventParticipationScalarFieldEnum = (typeof EventParticipationScalarFieldEnum)[keyof typeof EventParticipationScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -12605,6 +13768,13 @@ export namespace Prisma {
   export type EventOrderByRelevanceFieldEnum = (typeof EventOrderByRelevanceFieldEnum)[keyof typeof EventOrderByRelevanceFieldEnum]
 
 
+  export const EventParticipationOrderByRelevanceFieldEnum: {
+    userId: 'userId'
+  };
+
+  export type EventParticipationOrderByRelevanceFieldEnum = (typeof EventParticipationOrderByRelevanceFieldEnum)[keyof typeof EventParticipationOrderByRelevanceFieldEnum]
+
+
   /**
    * Field references
    */
@@ -12635,6 +13805,13 @@ export namespace Prisma {
    * Reference to a field of type 'RelationStatus'
    */
   export type EnumRelationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'EventParticipationStatus'
+   */
+  export type EnumEventParticipationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'EventParticipationStatus'>
     
 
 
@@ -12680,6 +13857,7 @@ export namespace Prisma {
     events?: EventListRelationFilter
     relations?: RelationshipListRelationFilter
     relatedBy?: RelationshipListRelationFilter
+    eventParticipations?: EventParticipationListRelationFilter
   }
 
   export type UserOrderByWithRelationInput = {
@@ -12711,6 +13889,7 @@ export namespace Prisma {
     events?: EventOrderByRelationAggregateInput
     relations?: RelationshipOrderByRelationAggregateInput
     relatedBy?: RelationshipOrderByRelationAggregateInput
+    eventParticipations?: EventParticipationOrderByRelationAggregateInput
     _relevance?: UserOrderByRelevanceInput
   }
 
@@ -12746,6 +13925,7 @@ export namespace Prisma {
     events?: EventListRelationFilter
     relations?: RelationshipListRelationFilter
     relatedBy?: RelationshipListRelationFilter
+    eventParticipations?: EventParticipationListRelationFilter
   }, "id" | "username" | "email">
 
   export type UserOrderByWithAggregationInput = {
@@ -13357,6 +14537,7 @@ export namespace Prisma {
     authorId?: StringFilter<"Event"> | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     posts?: PostListRelationFilter
+    participants?: EventParticipationListRelationFilter
   }
 
   export type EventOrderByWithRelationInput = {
@@ -13372,6 +14553,7 @@ export namespace Prisma {
     authorId?: SortOrder
     author?: UserOrderByWithRelationInput
     posts?: PostOrderByRelationAggregateInput
+    participants?: EventParticipationOrderByRelationAggregateInput
     _relevance?: EventOrderByRelevanceInput
   }
 
@@ -13391,6 +14573,7 @@ export namespace Prisma {
     authorId?: StringFilter<"Event"> | string
     author?: XOR<UserScalarRelationFilter, UserWhereInput>
     posts?: PostListRelationFilter
+    participants?: EventParticipationListRelationFilter
   }, "id">
 
   export type EventOrderByWithAggregationInput = {
@@ -13427,6 +14610,73 @@ export namespace Prisma {
     authorId?: StringWithAggregatesFilter<"Event"> | string
   }
 
+  export type EventParticipationWhereInput = {
+    AND?: EventParticipationWhereInput | EventParticipationWhereInput[]
+    OR?: EventParticipationWhereInput[]
+    NOT?: EventParticipationWhereInput | EventParticipationWhereInput[]
+    id?: IntFilter<"EventParticipation"> | number
+    createdAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    updatedAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    status?: EnumEventParticipationStatusFilter<"EventParticipation"> | $Enums.EventParticipationStatus
+    userId?: StringFilter<"EventParticipation"> | string
+    eventId?: IntFilter<"EventParticipation"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }
+
+  export type EventParticipationOrderByWithRelationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    user?: UserOrderByWithRelationInput
+    event?: EventOrderByWithRelationInput
+    _relevance?: EventParticipationOrderByRelevanceInput
+  }
+
+  export type EventParticipationWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    userId_eventId?: EventParticipationUserIdEventIdCompoundUniqueInput
+    AND?: EventParticipationWhereInput | EventParticipationWhereInput[]
+    OR?: EventParticipationWhereInput[]
+    NOT?: EventParticipationWhereInput | EventParticipationWhereInput[]
+    createdAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    updatedAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    status?: EnumEventParticipationStatusFilter<"EventParticipation"> | $Enums.EventParticipationStatus
+    userId?: StringFilter<"EventParticipation"> | string
+    eventId?: IntFilter<"EventParticipation"> | number
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    event?: XOR<EventScalarRelationFilter, EventWhereInput>
+  }, "id" | "userId_eventId">
+
+  export type EventParticipationOrderByWithAggregationInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+    _count?: EventParticipationCountOrderByAggregateInput
+    _avg?: EventParticipationAvgOrderByAggregateInput
+    _max?: EventParticipationMaxOrderByAggregateInput
+    _min?: EventParticipationMinOrderByAggregateInput
+    _sum?: EventParticipationSumOrderByAggregateInput
+  }
+
+  export type EventParticipationScalarWhereWithAggregatesInput = {
+    AND?: EventParticipationScalarWhereWithAggregatesInput | EventParticipationScalarWhereWithAggregatesInput[]
+    OR?: EventParticipationScalarWhereWithAggregatesInput[]
+    NOT?: EventParticipationScalarWhereWithAggregatesInput | EventParticipationScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"EventParticipation"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"EventParticipation"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"EventParticipation"> | Date | string
+    status?: EnumEventParticipationStatusWithAggregatesFilter<"EventParticipation"> | $Enums.EventParticipationStatus
+    userId?: StringWithAggregatesFilter<"EventParticipation"> | string
+    eventId?: IntWithAggregatesFilter<"EventParticipation"> | number
+  }
+
   export type UserCreateInput = {
     id?: string
     username?: string | null
@@ -13456,6 +14706,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -13487,6 +14738,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -13518,6 +14770,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -13549,6 +14802,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -14105,6 +15359,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutEventsInput
     posts?: PostCreateNestedManyWithoutEventInput
+    participants?: EventParticipationCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateInput = {
@@ -14119,6 +15374,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     authorId: string
     posts?: PostUncheckedCreateNestedManyWithoutEventInput
+    participants?: EventParticipationUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventUpdateInput = {
@@ -14132,6 +15388,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutEventsNestedInput
     posts?: PostUpdateManyWithoutEventNestedInput
+    participants?: EventParticipationUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateInput = {
@@ -14146,6 +15403,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
     posts?: PostUncheckedUpdateManyWithoutEventNestedInput
+    participants?: EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventCreateManyInput = {
@@ -14183,6 +15441,64 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventParticipationCreateInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    user: UserCreateNestedOneWithoutEventParticipationsInput
+    event: EventCreateNestedOneWithoutParticipantsInput
+  }
+
+  export type EventParticipationUncheckedCreateInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    userId: string
+    eventId: number
+  }
+
+  export type EventParticipationUpdateInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    user?: UserUpdateOneRequiredWithoutEventParticipationsNestedInput
+    event?: EventUpdateOneRequiredWithoutParticipantsNestedInput
+  }
+
+  export type EventParticipationUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    userId?: StringFieldUpdateOperationsInput | string
+    eventId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EventParticipationCreateManyInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    userId: string
+    eventId: number
+  }
+
+  export type EventParticipationUpdateManyMutationInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+  }
+
+  export type EventParticipationUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    userId?: StringFieldUpdateOperationsInput | string
+    eventId?: IntFieldUpdateOperationsInput | number
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -14280,6 +15596,12 @@ export namespace Prisma {
     none?: RelationshipWhereInput
   }
 
+  export type EventParticipationListRelationFilter = {
+    every?: EventParticipationWhereInput
+    some?: EventParticipationWhereInput
+    none?: EventParticipationWhereInput
+  }
+
   export type SortOrderInput = {
     sort: SortOrder
     nulls?: NullsOrder
@@ -14318,6 +15640,10 @@ export namespace Prisma {
   }
 
   export type RelationshipOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type EventParticipationOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -14939,6 +16265,76 @@ export namespace Prisma {
     id?: SortOrder
   }
 
+  export type EnumEventParticipationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipationStatus | EnumEventParticipationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipationStatus[]
+    notIn?: $Enums.EventParticipationStatus[]
+    not?: NestedEnumEventParticipationStatusFilter<$PrismaModel> | $Enums.EventParticipationStatus
+  }
+
+  export type EventScalarRelationFilter = {
+    is?: EventWhereInput
+    isNot?: EventWhereInput
+  }
+
+  export type EventParticipationOrderByRelevanceInput = {
+    fields: EventParticipationOrderByRelevanceFieldEnum | EventParticipationOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type EventParticipationUserIdEventIdCompoundUniqueInput = {
+    userId: string
+    eventId: number
+  }
+
+  export type EventParticipationCountOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type EventParticipationAvgOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type EventParticipationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type EventParticipationMinOrderByAggregateInput = {
+    id?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    status?: SortOrder
+    userId?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type EventParticipationSumOrderByAggregateInput = {
+    id?: SortOrder
+    eventId?: SortOrder
+  }
+
+  export type EnumEventParticipationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipationStatus | EnumEventParticipationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipationStatus[]
+    notIn?: $Enums.EventParticipationStatus[]
+    not?: NestedEnumEventParticipationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventParticipationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventParticipationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventParticipationStatusFilter<$PrismaModel>
+  }
+
   export type PostCreateNestedManyWithoutAuthorInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -15030,6 +16426,13 @@ export namespace Prisma {
     connect?: RelationshipWhereUniqueInput | RelationshipWhereUniqueInput[]
   }
 
+  export type EventParticipationCreateNestedManyWithoutUserInput = {
+    create?: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput> | EventParticipationCreateWithoutUserInput[] | EventParticipationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutUserInput | EventParticipationCreateOrConnectWithoutUserInput[]
+    createMany?: EventParticipationCreateManyUserInputEnvelope
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -15119,6 +16522,13 @@ export namespace Prisma {
     connectOrCreate?: RelationshipCreateOrConnectWithoutToInput | RelationshipCreateOrConnectWithoutToInput[]
     createMany?: RelationshipCreateManyToInputEnvelope
     connect?: RelationshipWhereUniqueInput | RelationshipWhereUniqueInput[]
+  }
+
+  export type EventParticipationUncheckedCreateNestedManyWithoutUserInput = {
+    create?: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput> | EventParticipationCreateWithoutUserInput[] | EventParticipationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutUserInput | EventParticipationCreateOrConnectWithoutUserInput[]
+    createMany?: EventParticipationCreateManyUserInputEnvelope
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -15315,6 +16725,20 @@ export namespace Prisma {
     deleteMany?: RelationshipScalarWhereInput | RelationshipScalarWhereInput[]
   }
 
+  export type EventParticipationUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput> | EventParticipationCreateWithoutUserInput[] | EventParticipationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutUserInput | EventParticipationCreateOrConnectWithoutUserInput[]
+    upsert?: EventParticipationUpsertWithWhereUniqueWithoutUserInput | EventParticipationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EventParticipationCreateManyUserInputEnvelope
+    set?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    disconnect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    delete?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    update?: EventParticipationUpdateWithWhereUniqueWithoutUserInput | EventParticipationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EventParticipationUpdateManyWithWhereWithoutUserInput | EventParticipationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
     create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
     connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
@@ -15495,6 +16919,20 @@ export namespace Prisma {
     update?: RelationshipUpdateWithWhereUniqueWithoutToInput | RelationshipUpdateWithWhereUniqueWithoutToInput[]
     updateMany?: RelationshipUpdateManyWithWhereWithoutToInput | RelationshipUpdateManyWithWhereWithoutToInput[]
     deleteMany?: RelationshipScalarWhereInput | RelationshipScalarWhereInput[]
+  }
+
+  export type EventParticipationUncheckedUpdateManyWithoutUserNestedInput = {
+    create?: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput> | EventParticipationCreateWithoutUserInput[] | EventParticipationUncheckedCreateWithoutUserInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutUserInput | EventParticipationCreateOrConnectWithoutUserInput[]
+    upsert?: EventParticipationUpsertWithWhereUniqueWithoutUserInput | EventParticipationUpsertWithWhereUniqueWithoutUserInput[]
+    createMany?: EventParticipationCreateManyUserInputEnvelope
+    set?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    disconnect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    delete?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    update?: EventParticipationUpdateWithWhereUniqueWithoutUserInput | EventParticipationUpdateWithWhereUniqueWithoutUserInput[]
+    updateMany?: EventParticipationUpdateManyWithWhereWithoutUserInput | EventParticipationUpdateManyWithWhereWithoutUserInput[]
+    deleteMany?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutPostsInput = {
@@ -15944,11 +17382,25 @@ export namespace Prisma {
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
+  export type EventParticipationCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput> | EventParticipationCreateWithoutEventInput[] | EventParticipationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutEventInput | EventParticipationCreateOrConnectWithoutEventInput[]
+    createMany?: EventParticipationCreateManyEventInputEnvelope
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+  }
+
   export type PostUncheckedCreateNestedManyWithoutEventInput = {
     create?: XOR<PostCreateWithoutEventInput, PostUncheckedCreateWithoutEventInput> | PostCreateWithoutEventInput[] | PostUncheckedCreateWithoutEventInput[]
     connectOrCreate?: PostCreateOrConnectWithoutEventInput | PostCreateOrConnectWithoutEventInput[]
     createMany?: PostCreateManyEventInputEnvelope
     connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type EventParticipationUncheckedCreateNestedManyWithoutEventInput = {
+    create?: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput> | EventParticipationCreateWithoutEventInput[] | EventParticipationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutEventInput | EventParticipationCreateOrConnectWithoutEventInput[]
+    createMany?: EventParticipationCreateManyEventInputEnvelope
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
   }
 
   export type UserUpdateOneRequiredWithoutEventsNestedInput = {
@@ -15973,6 +17425,20 @@ export namespace Prisma {
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
+  export type EventParticipationUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput> | EventParticipationCreateWithoutEventInput[] | EventParticipationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutEventInput | EventParticipationCreateOrConnectWithoutEventInput[]
+    upsert?: EventParticipationUpsertWithWhereUniqueWithoutEventInput | EventParticipationUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventParticipationCreateManyEventInputEnvelope
+    set?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    disconnect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    delete?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    update?: EventParticipationUpdateWithWhereUniqueWithoutEventInput | EventParticipationUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventParticipationUpdateManyWithWhereWithoutEventInput | EventParticipationUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
+  }
+
   export type PostUncheckedUpdateManyWithoutEventNestedInput = {
     create?: XOR<PostCreateWithoutEventInput, PostUncheckedCreateWithoutEventInput> | PostCreateWithoutEventInput[] | PostUncheckedCreateWithoutEventInput[]
     connectOrCreate?: PostCreateOrConnectWithoutEventInput | PostCreateOrConnectWithoutEventInput[]
@@ -15985,6 +17451,52 @@ export namespace Prisma {
     update?: PostUpdateWithWhereUniqueWithoutEventInput | PostUpdateWithWhereUniqueWithoutEventInput[]
     updateMany?: PostUpdateManyWithWhereWithoutEventInput | PostUpdateManyWithWhereWithoutEventInput[]
     deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type EventParticipationUncheckedUpdateManyWithoutEventNestedInput = {
+    create?: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput> | EventParticipationCreateWithoutEventInput[] | EventParticipationUncheckedCreateWithoutEventInput[]
+    connectOrCreate?: EventParticipationCreateOrConnectWithoutEventInput | EventParticipationCreateOrConnectWithoutEventInput[]
+    upsert?: EventParticipationUpsertWithWhereUniqueWithoutEventInput | EventParticipationUpsertWithWhereUniqueWithoutEventInput[]
+    createMany?: EventParticipationCreateManyEventInputEnvelope
+    set?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    disconnect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    delete?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    connect?: EventParticipationWhereUniqueInput | EventParticipationWhereUniqueInput[]
+    update?: EventParticipationUpdateWithWhereUniqueWithoutEventInput | EventParticipationUpdateWithWhereUniqueWithoutEventInput[]
+    updateMany?: EventParticipationUpdateManyWithWhereWithoutEventInput | EventParticipationUpdateManyWithWhereWithoutEventInput[]
+    deleteMany?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutEventParticipationsInput = {
+    create?: XOR<UserCreateWithoutEventParticipationsInput, UserUncheckedCreateWithoutEventParticipationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventParticipationsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type EventCreateNestedOneWithoutParticipantsInput = {
+    create?: XOR<EventCreateWithoutParticipantsInput, EventUncheckedCreateWithoutParticipantsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutParticipantsInput
+    connect?: EventWhereUniqueInput
+  }
+
+  export type EnumEventParticipationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.EventParticipationStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutEventParticipationsNestedInput = {
+    create?: XOR<UserCreateWithoutEventParticipationsInput, UserUncheckedCreateWithoutEventParticipationsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutEventParticipationsInput
+    upsert?: UserUpsertWithoutEventParticipationsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutEventParticipationsInput, UserUpdateWithoutEventParticipationsInput>, UserUncheckedUpdateWithoutEventParticipationsInput>
+  }
+
+  export type EventUpdateOneRequiredWithoutParticipantsNestedInput = {
+    create?: XOR<EventCreateWithoutParticipantsInput, EventUncheckedCreateWithoutParticipantsInput>
+    connectOrCreate?: EventCreateOrConnectWithoutParticipantsInput
+    upsert?: EventUpsertWithoutParticipantsInput
+    connect?: EventWhereUniqueInput
+    update?: XOR<XOR<EventUpdateToOneWithWhereWithoutParticipantsInput, EventUpdateWithoutParticipantsInput>, EventUncheckedUpdateWithoutParticipantsInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -16169,6 +17681,23 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumRelationStatusFilter<$PrismaModel>
     _max?: NestedEnumRelationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumEventParticipationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipationStatus | EnumEventParticipationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipationStatus[]
+    notIn?: $Enums.EventParticipationStatus[]
+    not?: NestedEnumEventParticipationStatusFilter<$PrismaModel> | $Enums.EventParticipationStatus
+  }
+
+  export type NestedEnumEventParticipationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.EventParticipationStatus | EnumEventParticipationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.EventParticipationStatus[]
+    notIn?: $Enums.EventParticipationStatus[]
+    not?: NestedEnumEventParticipationStatusWithAggregatesFilter<$PrismaModel> | $Enums.EventParticipationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumEventParticipationStatusFilter<$PrismaModel>
+    _max?: NestedEnumEventParticipationStatusFilter<$PrismaModel>
   }
 
   export type PostCreateWithoutAuthorInput = {
@@ -16435,6 +17964,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostCreateNestedManyWithoutEventInput
+    participants?: EventParticipationCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutAuthorInput = {
@@ -16448,6 +17978,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     posts?: PostUncheckedCreateNestedManyWithoutEventInput
+    participants?: EventParticipationUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutAuthorInput = {
@@ -16509,6 +18040,31 @@ export namespace Prisma {
 
   export type RelationshipCreateManyToInputEnvelope = {
     data: RelationshipCreateManyToInput | RelationshipCreateManyToInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EventParticipationCreateWithoutUserInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    event: EventCreateNestedOneWithoutParticipantsInput
+  }
+
+  export type EventParticipationUncheckedCreateWithoutUserInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    eventId: number
+  }
+
+  export type EventParticipationCreateOrConnectWithoutUserInput = {
+    where: EventParticipationWhereUniqueInput
+    create: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput>
+  }
+
+  export type EventParticipationCreateManyUserInputEnvelope = {
+    data: EventParticipationCreateManyUserInput | EventParticipationCreateManyUserInput[]
     skipDuplicates?: boolean
   }
 
@@ -16833,6 +18389,34 @@ export namespace Prisma {
     data: XOR<RelationshipUpdateManyMutationInput, RelationshipUncheckedUpdateManyWithoutToInput>
   }
 
+  export type EventParticipationUpsertWithWhereUniqueWithoutUserInput = {
+    where: EventParticipationWhereUniqueInput
+    update: XOR<EventParticipationUpdateWithoutUserInput, EventParticipationUncheckedUpdateWithoutUserInput>
+    create: XOR<EventParticipationCreateWithoutUserInput, EventParticipationUncheckedCreateWithoutUserInput>
+  }
+
+  export type EventParticipationUpdateWithWhereUniqueWithoutUserInput = {
+    where: EventParticipationWhereUniqueInput
+    data: XOR<EventParticipationUpdateWithoutUserInput, EventParticipationUncheckedUpdateWithoutUserInput>
+  }
+
+  export type EventParticipationUpdateManyWithWhereWithoutUserInput = {
+    where: EventParticipationScalarWhereInput
+    data: XOR<EventParticipationUpdateManyMutationInput, EventParticipationUncheckedUpdateManyWithoutUserInput>
+  }
+
+  export type EventParticipationScalarWhereInput = {
+    AND?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
+    OR?: EventParticipationScalarWhereInput[]
+    NOT?: EventParticipationScalarWhereInput | EventParticipationScalarWhereInput[]
+    id?: IntFilter<"EventParticipation"> | number
+    createdAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    updatedAt?: DateTimeFilter<"EventParticipation"> | Date | string
+    status?: EnumEventParticipationStatusFilter<"EventParticipation"> | $Enums.EventParticipationStatus
+    userId?: StringFilter<"EventParticipation"> | string
+    eventId?: IntFilter<"EventParticipation"> | number
+  }
+
   export type UserCreateWithoutPostsInput = {
     id?: string
     username?: string | null
@@ -16861,6 +18445,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -16891,6 +18476,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -16964,6 +18550,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     author: UserCreateNestedOneWithoutEventsInput
+    participants?: EventParticipationCreateNestedManyWithoutEventInput
   }
 
   export type EventUncheckedCreateWithoutPostsInput = {
@@ -16977,6 +18564,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     authorId: string
+    participants?: EventParticipationUncheckedCreateNestedManyWithoutEventInput
   }
 
   export type EventCreateOrConnectWithoutPostsInput = {
@@ -17023,6 +18611,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -17053,6 +18642,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LikeUpsertWithWhereUniqueWithoutPostInput = {
@@ -17108,6 +18698,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     author?: UserUpdateOneRequiredWithoutEventsNestedInput
+    participants?: EventParticipationUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutPostsInput = {
@@ -17121,6 +18712,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
+    participants?: EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type PostCreateWithoutLikesInput = {
@@ -17179,6 +18771,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLikesInput = {
@@ -17209,6 +18802,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLikesInput = {
@@ -17315,6 +18909,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLikesInput = {
@@ -17345,6 +18940,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type CommentUpsertWithoutLikesInput = {
@@ -17435,6 +19031,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCommentsInput = {
@@ -17465,6 +19062,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCommentsInput = {
@@ -17627,6 +19225,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -17657,6 +19256,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type LikeUpsertWithWhereUniqueWithoutCommentInput = {
@@ -17751,6 +19351,7 @@ export namespace Prisma {
     stories?: StoryCreateNestedManyWithoutAuthorInput
     events?: EventCreateNestedManyWithoutAuthorInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRelationsInput = {
@@ -17781,6 +19382,7 @@ export namespace Prisma {
     stories?: StoryUncheckedCreateNestedManyWithoutAuthorInput
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRelationsInput = {
@@ -17816,6 +19418,7 @@ export namespace Prisma {
     stories?: StoryCreateNestedManyWithoutAuthorInput
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutRelatedByInput = {
@@ -17846,6 +19449,7 @@ export namespace Prisma {
     stories?: StoryUncheckedCreateNestedManyWithoutAuthorInput
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutRelatedByInput = {
@@ -17892,6 +19496,7 @@ export namespace Prisma {
     stories?: StoryUpdateManyWithoutAuthorNestedInput
     events?: EventUpdateManyWithoutAuthorNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRelationsInput = {
@@ -17922,6 +19527,7 @@ export namespace Prisma {
     stories?: StoryUncheckedUpdateManyWithoutAuthorNestedInput
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutRelatedByInput = {
@@ -17963,6 +19569,7 @@ export namespace Prisma {
     stories?: StoryUpdateManyWithoutAuthorNestedInput
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutRelatedByInput = {
@@ -17993,6 +19600,7 @@ export namespace Prisma {
     stories?: StoryUncheckedUpdateManyWithoutAuthorNestedInput
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutFollowersInput = {
@@ -18023,6 +19631,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowersInput = {
@@ -18053,6 +19662,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowersInput = {
@@ -18088,6 +19698,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutFollowingInput = {
@@ -18118,6 +19729,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutFollowingInput = {
@@ -18164,6 +19776,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowersInput = {
@@ -18194,6 +19807,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutFollowingInput = {
@@ -18235,6 +19849,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutFollowingInput = {
@@ -18265,6 +19880,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutSenderInput = {
@@ -18295,6 +19911,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutSenderInput = {
@@ -18325,6 +19942,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutSenderInput = {
@@ -18360,6 +19978,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutReceiverInput = {
@@ -18390,6 +20009,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutReceiverInput = {
@@ -18436,6 +20056,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutSenderInput = {
@@ -18466,6 +20087,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutReceiverInput = {
@@ -18507,6 +20129,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutReceiverInput = {
@@ -18537,6 +20160,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutBlocksInput = {
@@ -18567,6 +20191,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBlocksInput = {
@@ -18597,6 +20222,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBlocksInput = {
@@ -18632,6 +20258,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBlockedByInput = {
@@ -18662,6 +20289,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBlockedByInput = {
@@ -18708,6 +20336,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBlocksInput = {
@@ -18738,6 +20367,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserUpsertWithoutBlockedByInput = {
@@ -18779,6 +20409,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBlockedByInput = {
@@ -18809,6 +20440,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutStoriesInput = {
@@ -18839,6 +20471,7 @@ export namespace Prisma {
     events?: EventCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutStoriesInput = {
@@ -18869,6 +20502,7 @@ export namespace Prisma {
     events?: EventUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutStoriesInput = {
@@ -18915,6 +20549,7 @@ export namespace Prisma {
     events?: EventUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutStoriesInput = {
@@ -18945,6 +20580,7 @@ export namespace Prisma {
     events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type UserCreateWithoutEventsInput = {
@@ -18975,6 +20611,7 @@ export namespace Prisma {
     stories?: StoryCreateNestedManyWithoutAuthorInput
     relations?: RelationshipCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationCreateNestedManyWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEventsInput = {
@@ -19005,6 +20642,7 @@ export namespace Prisma {
     stories?: StoryUncheckedCreateNestedManyWithoutAuthorInput
     relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
     relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+    eventParticipations?: EventParticipationUncheckedCreateNestedManyWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEventsInput = {
@@ -19042,6 +20680,31 @@ export namespace Prisma {
 
   export type PostCreateManyEventInputEnvelope = {
     data: PostCreateManyEventInput | PostCreateManyEventInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type EventParticipationCreateWithoutEventInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    user: UserCreateNestedOneWithoutEventParticipationsInput
+  }
+
+  export type EventParticipationUncheckedCreateWithoutEventInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    userId: string
+  }
+
+  export type EventParticipationCreateOrConnectWithoutEventInput = {
+    where: EventParticipationWhereUniqueInput
+    create: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventParticipationCreateManyEventInputEnvelope = {
+    data: EventParticipationCreateManyEventInput | EventParticipationCreateManyEventInput[]
     skipDuplicates?: boolean
   }
 
@@ -19084,6 +20747,7 @@ export namespace Prisma {
     stories?: StoryUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUpdateManyWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEventsInput = {
@@ -19114,6 +20778,7 @@ export namespace Prisma {
     stories?: StoryUncheckedUpdateManyWithoutAuthorNestedInput
     relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
     relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+    eventParticipations?: EventParticipationUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type PostUpsertWithWhereUniqueWithoutEventInput = {
@@ -19130,6 +20795,232 @@ export namespace Prisma {
   export type PostUpdateManyWithWhereWithoutEventInput = {
     where: PostScalarWhereInput
     data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type EventParticipationUpsertWithWhereUniqueWithoutEventInput = {
+    where: EventParticipationWhereUniqueInput
+    update: XOR<EventParticipationUpdateWithoutEventInput, EventParticipationUncheckedUpdateWithoutEventInput>
+    create: XOR<EventParticipationCreateWithoutEventInput, EventParticipationUncheckedCreateWithoutEventInput>
+  }
+
+  export type EventParticipationUpdateWithWhereUniqueWithoutEventInput = {
+    where: EventParticipationWhereUniqueInput
+    data: XOR<EventParticipationUpdateWithoutEventInput, EventParticipationUncheckedUpdateWithoutEventInput>
+  }
+
+  export type EventParticipationUpdateManyWithWhereWithoutEventInput = {
+    where: EventParticipationScalarWhereInput
+    data: XOR<EventParticipationUpdateManyMutationInput, EventParticipationUncheckedUpdateManyWithoutEventInput>
+  }
+
+  export type UserCreateWithoutEventParticipationsInput = {
+    id?: string
+    username?: string | null
+    avatar?: string | null
+    cover?: string | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    surname?: string | null
+    description?: string | null
+    city?: string | null
+    school?: string | null
+    work?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    likes?: LikeCreateNestedManyWithoutUserInput
+    comments?: CommentCreateNestedManyWithoutUserInput
+    followers?: FollowerCreateNestedManyWithoutFollowerInput
+    following?: FollowerCreateNestedManyWithoutFollowingInput
+    sender?: FollowRequestCreateNestedManyWithoutSenderInput
+    receiver?: FollowRequestCreateNestedManyWithoutReceiverInput
+    blocks?: BlockCreateNestedManyWithoutBlockerInput
+    blockedBy?: BlockCreateNestedManyWithoutBlockedInput
+    stories?: StoryCreateNestedManyWithoutAuthorInput
+    events?: EventCreateNestedManyWithoutAuthorInput
+    relations?: RelationshipCreateNestedManyWithoutFromInput
+    relatedBy?: RelationshipCreateNestedManyWithoutToInput
+  }
+
+  export type UserUncheckedCreateWithoutEventParticipationsInput = {
+    id?: string
+    username?: string | null
+    avatar?: string | null
+    cover?: string | null
+    email?: string | null
+    password?: string | null
+    name?: string | null
+    surname?: string | null
+    description?: string | null
+    city?: string | null
+    school?: string | null
+    work?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    likes?: LikeUncheckedCreateNestedManyWithoutUserInput
+    comments?: CommentUncheckedCreateNestedManyWithoutUserInput
+    followers?: FollowerUncheckedCreateNestedManyWithoutFollowerInput
+    following?: FollowerUncheckedCreateNestedManyWithoutFollowingInput
+    sender?: FollowRequestUncheckedCreateNestedManyWithoutSenderInput
+    receiver?: FollowRequestUncheckedCreateNestedManyWithoutReceiverInput
+    blocks?: BlockUncheckedCreateNestedManyWithoutBlockerInput
+    blockedBy?: BlockUncheckedCreateNestedManyWithoutBlockedInput
+    stories?: StoryUncheckedCreateNestedManyWithoutAuthorInput
+    events?: EventUncheckedCreateNestedManyWithoutAuthorInput
+    relations?: RelationshipUncheckedCreateNestedManyWithoutFromInput
+    relatedBy?: RelationshipUncheckedCreateNestedManyWithoutToInput
+  }
+
+  export type UserCreateOrConnectWithoutEventParticipationsInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutEventParticipationsInput, UserUncheckedCreateWithoutEventParticipationsInput>
+  }
+
+  export type EventCreateWithoutParticipantsInput = {
+    title: string
+    description?: string | null
+    location?: string | null
+    date: Date | string
+    time?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    author: UserCreateNestedOneWithoutEventsInput
+    posts?: PostCreateNestedManyWithoutEventInput
+  }
+
+  export type EventUncheckedCreateWithoutParticipantsInput = {
+    id?: number
+    title: string
+    description?: string | null
+    location?: string | null
+    date: Date | string
+    time?: string | null
+    image?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    authorId: string
+    posts?: PostUncheckedCreateNestedManyWithoutEventInput
+  }
+
+  export type EventCreateOrConnectWithoutParticipantsInput = {
+    where: EventWhereUniqueInput
+    create: XOR<EventCreateWithoutParticipantsInput, EventUncheckedCreateWithoutParticipantsInput>
+  }
+
+  export type UserUpsertWithoutEventParticipationsInput = {
+    update: XOR<UserUpdateWithoutEventParticipationsInput, UserUncheckedUpdateWithoutEventParticipationsInput>
+    create: XOR<UserCreateWithoutEventParticipationsInput, UserUncheckedCreateWithoutEventParticipationsInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutEventParticipationsInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutEventParticipationsInput, UserUncheckedUpdateWithoutEventParticipationsInput>
+  }
+
+  export type UserUpdateWithoutEventParticipationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    cover?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    surname?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    work?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUpdateManyWithoutUserNestedInput
+    comments?: CommentUpdateManyWithoutUserNestedInput
+    followers?: FollowerUpdateManyWithoutFollowerNestedInput
+    following?: FollowerUpdateManyWithoutFollowingNestedInput
+    sender?: FollowRequestUpdateManyWithoutSenderNestedInput
+    receiver?: FollowRequestUpdateManyWithoutReceiverNestedInput
+    blocks?: BlockUpdateManyWithoutBlockerNestedInput
+    blockedBy?: BlockUpdateManyWithoutBlockedNestedInput
+    stories?: StoryUpdateManyWithoutAuthorNestedInput
+    events?: EventUpdateManyWithoutAuthorNestedInput
+    relations?: RelationshipUpdateManyWithoutFromNestedInput
+    relatedBy?: RelationshipUpdateManyWithoutToNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutEventParticipationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: NullableStringFieldUpdateOperationsInput | string | null
+    avatar?: NullableStringFieldUpdateOperationsInput | string | null
+    cover?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    surname?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    work?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    likes?: LikeUncheckedUpdateManyWithoutUserNestedInput
+    comments?: CommentUncheckedUpdateManyWithoutUserNestedInput
+    followers?: FollowerUncheckedUpdateManyWithoutFollowerNestedInput
+    following?: FollowerUncheckedUpdateManyWithoutFollowingNestedInput
+    sender?: FollowRequestUncheckedUpdateManyWithoutSenderNestedInput
+    receiver?: FollowRequestUncheckedUpdateManyWithoutReceiverNestedInput
+    blocks?: BlockUncheckedUpdateManyWithoutBlockerNestedInput
+    blockedBy?: BlockUncheckedUpdateManyWithoutBlockedNestedInput
+    stories?: StoryUncheckedUpdateManyWithoutAuthorNestedInput
+    events?: EventUncheckedUpdateManyWithoutAuthorNestedInput
+    relations?: RelationshipUncheckedUpdateManyWithoutFromNestedInput
+    relatedBy?: RelationshipUncheckedUpdateManyWithoutToNestedInput
+  }
+
+  export type EventUpsertWithoutParticipantsInput = {
+    update: XOR<EventUpdateWithoutParticipantsInput, EventUncheckedUpdateWithoutParticipantsInput>
+    create: XOR<EventCreateWithoutParticipantsInput, EventUncheckedCreateWithoutParticipantsInput>
+    where?: EventWhereInput
+  }
+
+  export type EventUpdateToOneWithWhereWithoutParticipantsInput = {
+    where?: EventWhereInput
+    data: XOR<EventUpdateWithoutParticipantsInput, EventUncheckedUpdateWithoutParticipantsInput>
+  }
+
+  export type EventUpdateWithoutParticipantsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    author?: UserUpdateOneRequiredWithoutEventsNestedInput
+    posts?: PostUpdateManyWithoutEventNestedInput
+  }
+
+  export type EventUncheckedUpdateWithoutParticipantsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: DateTimeFieldUpdateOperationsInput | Date | string
+    time?: NullableStringFieldUpdateOperationsInput | string | null
+    image?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    authorId?: StringFieldUpdateOperationsInput | string
+    posts?: PostUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type PostCreateManyAuthorInput = {
@@ -19236,6 +21127,14 @@ export namespace Prisma {
     status?: $Enums.RelationStatus
     createdAt?: Date | string
     updatedAt?: Date | string
+  }
+
+  export type EventParticipationCreateManyUserInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    eventId: number
   }
 
   export type PostUpdateWithoutAuthorInput = {
@@ -19480,6 +21379,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUpdateManyWithoutEventNestedInput
+    participants?: EventParticipationUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateWithoutAuthorInput = {
@@ -19493,6 +21393,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     posts?: PostUncheckedUpdateManyWithoutEventNestedInput
+    participants?: EventParticipationUncheckedUpdateManyWithoutEventNestedInput
   }
 
   export type EventUncheckedUpdateManyWithoutAuthorInput = {
@@ -19553,6 +21454,29 @@ export namespace Prisma {
     status?: EnumRelationStatusFieldUpdateOperationsInput | $Enums.RelationStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type EventParticipationUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    event?: EventUpdateOneRequiredWithoutParticipantsNestedInput
+  }
+
+  export type EventParticipationUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    eventId?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type EventParticipationUncheckedUpdateManyWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    eventId?: IntFieldUpdateOperationsInput | number
   }
 
   export type LikeCreateManyPostInput = {
@@ -19705,6 +21629,14 @@ export namespace Prisma {
     authorId: string
   }
 
+  export type EventParticipationCreateManyEventInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    status?: $Enums.EventParticipationStatus
+    userId: string
+  }
+
   export type PostUpdateWithoutEventInput = {
     title?: NullableStringFieldUpdateOperationsInput | string | null
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19736,6 +21668,29 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     authorId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventParticipationUpdateWithoutEventInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    user?: UserUpdateOneRequiredWithoutEventParticipationsNestedInput
+  }
+
+  export type EventParticipationUncheckedUpdateWithoutEventInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    userId?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type EventParticipationUncheckedUpdateManyWithoutEventInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    status?: EnumEventParticipationStatusFieldUpdateOperationsInput | $Enums.EventParticipationStatus
+    userId?: StringFieldUpdateOperationsInput | string
   }
 
 
