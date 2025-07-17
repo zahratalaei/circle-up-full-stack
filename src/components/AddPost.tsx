@@ -90,7 +90,7 @@ const AddPost = () => {
                         <Image src="/emoji.png" alt="" width={16} height={16} className='w-4 h-4 cursor-pointer'/>
                     </div>
                 </div>
-                <button 
+                {/* <button 
                     type='submit' 
                     className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     disabled={isSubmitting || (!description.trim() && !selectedEvent)}
@@ -100,7 +100,7 @@ const AddPost = () => {
                         color={isSubmitting || (!description.trim() && !selectedEvent) ? "#ccc" : "#905906"}  
                         strokeWidth={2}
                     />
-                </button>
+                </button> */}
             </form>
             
             {/* Image/Video Preview */}
@@ -158,77 +158,92 @@ const AddPost = () => {
             )}
             
             {/* Post Options */}
-            <div className='flex items-center gap-4 mt-4 text-gray-400 flex-wrap'>
-                <CldUploadWidget 
-                    uploadPreset="circleup"
-                    options={{
-                        maxFiles: 1,
-                        resourceType: "auto",
-                        folder: "social_media_posts",
-                        showUploadMoreButton: false,
-                        sources: ["local", "url", "camera"]
-                    }}
-                    onSuccess={(result) => {
-                        if (typeof result.info === 'object' && result.info?.secure_url) {
-                            setSelectedImage(result.info.secure_url);
+            <div className='flex items-center justify-between mt-4'>
+                <div className='flex items-center gap-4 text-gray-400 flex-wrap'>
+                    <CldUploadWidget 
+                        uploadPreset="circleup"
+                        options={{
+                            maxFiles: 1,
+                            resourceType: "auto",
+                            folder: "social_media_posts",
+                            showUploadMoreButton: false,
+                            sources: ["local", "url", "camera"]
+                        }}
+                        onSuccess={(result) => {
+                            if (typeof result.info === 'object' && result.info?.secure_url) {
+                                setSelectedImage(result.info.secure_url);
+                                setIsUploading(false);
+                            }
+                        }}
+                        onError={(error) => {
+                            console.error("Cloudinary upload error:", error);
                             setIsUploading(false);
-                        }
-                    }}
-                    onError={(error) => {
-                        console.error("Cloudinary upload error:", error);
-                        setIsUploading(false);
-                    }}
-                    onClose={() => {
-                        setIsUploading(false);
-                    }}
-                >
-                    {({ open }) => (
-                        <div 
-                            className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' 
-                            onClick={() => {
-                                setIsUploading(true);
-                                open();
-                            }}
-                        >
-                            <Image src="/addImage.png" alt="" width={20} height={20}/>
-                            {isUploading ? "Uploading..." : "Photo"}
-                        </div>
-                    )}
-                </CldUploadWidget>
-                
-                <CldUploadWidget 
-                    uploadPreset="circleup"
-                    options={{
-                        maxFiles: 1,
-                        resourceType: "video",
-                        maxFileSize: 50000000, // 50MB limit for videos
-                        folder: "social_media_posts"
-                    }}
-                    onSuccess={(result) => {
-                        if (typeof result.info === 'object' && result.info?.secure_url) {
-                            setSelectedImage(result.info.secure_url);
-                        }
-                    }}
-                    onError={(error) => {
-                        console.error("Cloudinary video upload error:", error);
-                    }}
-                >
-                    {({ open }) => (
-                        <div className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' onClick={() => open()}>
-                            <Image src="/addVideo.png" alt="" width={20} height={20}/>Video
-                        </div>
-                    )}
-                </CldUploadWidget>
-                
-                <div 
-                    className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' 
-                    onClick={() => setShowEventModal(true)}
-                >
-                    <Image src="/addEvent.png" alt="" width={20} height={20}/>Event
+                        }}
+                        onClose={() => {
+                            setIsUploading(false);
+                        }}
+                    >
+                        {({ open }) => (
+                            <div 
+                                className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' 
+                                onClick={() => {
+                                    setIsUploading(true);
+                                    open();
+                                }}
+                            >
+                                <Image src="/addImage.png" alt="" width={20} height={20}/>
+                                {isUploading ? "Uploading..." : "Photo"}
+                            </div>
+                        )}
+                    </CldUploadWidget>
+                    
+                    <CldUploadWidget 
+                        uploadPreset="circleup"
+                        options={{
+                            maxFiles: 1,
+                            resourceType: "video",
+                            maxFileSize: 50000000, // 50MB limit for videos
+                            folder: "social_media_posts"
+                        }}
+                        onSuccess={(result) => {
+                            if (typeof result.info === 'object' && result.info?.secure_url) {
+                                setSelectedImage(result.info.secure_url);
+                            }
+                        }}
+                        onError={(error) => {
+                            console.error("Cloudinary video upload error:", error);
+                        }}
+                    >
+                        {({ open }) => (
+                            <div className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' onClick={() => open()}>
+                                <Image src="/addVideo.png" alt="" width={20} height={20}/>Video
+                            </div>
+                        )}
+                    </CldUploadWidget>
+                    
+                    <div 
+                        className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' 
+                        onClick={() => setShowEventModal(true)}
+                    >
+                        <Image src="/addEvent.png" alt="" width={20} height={20}/>Event
+                    </div>
+                    <div className='flex gap-2 cursor-pointer'>
+                        <Image src="/poll.png" alt="" width={20} height={20}/>Poll
+                    </div>
                 </div>
-                <div className='flex gap-2 cursor-pointer'>
-                    <Image src="/poll.png" alt="" width={20} height={20}/>Poll
-                </div>
+                
+                {/* Submit Button - moved to the right side */}
+                <button 
+                    type='submit' 
+                    className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                    disabled={isSubmitting || (!description.trim() && !selectedEvent)}
+                >
+                    <SendHorizontal 
+                        size={28} 
+                        color={isSubmitting || (!description.trim() && !selectedEvent) ? "#ccc" : "#905906"}  
+                        strokeWidth={2}
+                    />
+                </button>
             </div>
         </div>
         
