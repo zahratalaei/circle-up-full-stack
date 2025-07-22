@@ -52,19 +52,28 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-semibold">Create Event</h2>
-            <button
-              onClick={onClose}
-              className="p-1 hover:bg-muted rounded-full transition-colors"
-            >
-              <X size={20} />
-            </button>
-          </div>
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      {/* Semi-transparent Backdrop */}
+      <div 
+        className="absolute inset-0 backdrop-blur-[1px] bg-black/5" 
+        onClick={onClose}
+      />
+      
+      {/* Modal */}
+      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-semibold text-gray-800">Create Event</h2>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
+        {/* Content */}
+        <div className="p-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Event Title */}
             <div>
@@ -185,7 +194,29 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                   resourceType: "image",
                   folder: "events",
                   showUploadMoreButton: false,
-                  sources: ["local", "url", "camera"]
+                  sources: ["local", "url", "camera"],
+                  showAdvancedOptions: true,
+                  cropping: true,
+                  styles: {
+                    palette: {
+                      window: "#F4F2EE",
+                      windowBorder: "#641a0f",
+                      tabIcon: "#ae8d44",
+                      inactiveTabIcon: "#641a0f",
+                      link: "#641a0f",
+                      action: "#C7A04C",
+                      inProgress: "#C7A04C",
+                      complete: "#20B832",
+                      error: "#E63946",
+                      textDark: "#641a0f",
+                      textLight: "#FFFFFF",
+                      sourceBg: "#F4F2EE",
+                      sourceTextActive: "#C7A04C"
+                    },
+                    frame: {
+                      background: "rgba(0, 0, 0, 0.3)"
+                    }
+                  }
                 }}
                 onSuccess={(result) => {
                   if (typeof result.info === 'object' && result.info && 'secure_url' in result.info) {
@@ -216,26 +247,29 @@ const AddEvent = ({ onClose, onEventCreated }: AddEventProps) => {
                 )}
               </CldUploadWidget>
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-                disabled={isSubmitting}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                disabled={isSubmitting || !formData.title || !formData.date}
-                className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? "Creating..." : "Create Event"}
-              </button>
-            </div>
           </form>
+        </div>
+
+        {/* Footer */}
+        <div className="p-4 border-t">
+          <div className="flex gap-3">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors"
+              disabled={isSubmitting}
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              disabled={isSubmitting || !formData.title || !formData.date}
+              className="flex-1 bg-amber-600 hover:bg-amber-700 text-white font-medium py-2 px-4 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            >
+              {isSubmitting ? "Creating..." : "Create Event"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
