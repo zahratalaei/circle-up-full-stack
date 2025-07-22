@@ -5,6 +5,7 @@ import PostInteractionWrapper from "./PostInteractionWrapper";
 import { fetchComments } from "./fetchComments";
 import PostOptions from "./PostOptions";
 import EventParticipationButton from "./EventParticipationButton";
+import Avatar from "../avatar";
 
 
 export type PostContentProps = {
@@ -23,13 +24,14 @@ const PostContent = async ({ post, postLikers, postLikeCount, commentLikeCount, 
       {/* User */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Image
+          {/* <Image
             src={post?.author?.avatar ?? '/noAvatar.png'}
             alt=""
             width={40}
             height={40}
             className="w-10 h-10 rounded-full object-cover"
-          />
+          /> */}
+          <Avatar userImageUrl={post?.author?.avatar ?? '/noAvatar.png'} username={post?.author?.username ?? ''} size='md'/>
           <span className="font-medium text-sm">{post?.author?.username ?? ""}</span>
         </div>
         <PostOptions

@@ -7,6 +7,7 @@ import { addPost, addPostWithEvent } from '@/lib/actions';
 import { useUser } from '@clerk/nextjs';
 import { CldUploadWidget } from 'next-cloudinary';
 import AddEvent from './feed/AddEvent';
+import Avatar from './avatar';
 
 const AddPost = () => {
     const { user } = useUser();
@@ -109,7 +110,7 @@ const AddPost = () => {
     return (
         <div className='p-4 bg-white rounded-lg shadow-md flex flex-col min-[360px]:flex-row gap-4 justify-between text-sm'>
             {/* Avatar */}
-            <Image src={user.imageUrl || "/noAvatar.png"} alt="" width={48} height={48} className='w-12 h-12 object-cover rounded-full' />
+            {/* <Image src={user.imageUrl || "/noAvatar.png"} alt="" width={48} height={48} className='w-12 h-12 object-cover rounded-full' /> */}
             {/* Post */}
             <div className='p-2 flex-1 min-w-0'>            {/* Text Input */}
                 <form onSubmit={handleSubmit} className='flex gap-4 items-end'>
@@ -143,7 +144,7 @@ const AddPost = () => {
                         ) : (
                             <div className='space-y-4'>
                                 <Image
-                                    src={getTransformedImageUrl()}
+                                    src={getTransformedImageUrl() || ""}
                                     alt="Selected"
                                     width={400}
                                     height={300}
@@ -167,7 +168,7 @@ const AddPost = () => {
                                                 >
                                                     <div className='relative'>
                                                         <Image
-                                                            src={getTransformedImageUrl(effect.value)}
+                                                            src={getTransformedImageUrl(effect.value) || ""}
                                                             alt={effect.label}
                                                             width={80}
                                                             height={80}
@@ -282,7 +283,7 @@ const AddPost = () => {
                         >
                             {({ open }) => (
                                 <div
-                                    className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors'
+                                    className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors duration-200 hover:scale-105'
                                     onClick={() => {
                                         setIsUploading(true);
                                         open();
@@ -336,19 +337,19 @@ const AddPost = () => {
                             }}
                         >
                             {({ open }) => (
-                                <div className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors' onClick={() => open()}>
+                                <div className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors duration-200 hover:scale-105' onClick={() => open()}>
                                     <Image src="/addVideo.png" alt="" width={20} height={20} />Video
                                 </div>
                             )}
                         </CldUploadWidget>
 
                         <div
-                            className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors'
+                            className='flex gap-2 cursor-pointer hover:text-gray-600 transition-colors duration-200 hover:scale-105'
                             onClick={() => setShowEventModal(true)}
                         >
                             <Image src="/addEvent.png" alt="" width={20} height={20} />Event
                         </div>
-                        <div className='flex gap-2 cursor-pointer'>
+                        <div className='flex gap-2 cursor-pointer duration-200 hover:scale-105'>
                             <Image src="/poll.png" alt="" width={20} height={20} />Poll
                         </div>
                     </div>
@@ -357,7 +358,7 @@ const AddPost = () => {
                     <button
                         type='button'
                         onClick={handleSubmit}
-                        className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                        className='py-2 rounded-full transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed duration-200 hover:scale-105'
                         disabled={isSubmitting || (!description.trim() && !selectedEvent)}
                     >
                         <SendHorizontal

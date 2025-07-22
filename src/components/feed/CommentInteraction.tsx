@@ -35,7 +35,7 @@ const CommentInteraction = ({ postId, commentId, likes, onReply }: {
         <div className='flex items-center gap-8 text-xs'>
             <div className='flex items-center gap-4 bg-slate-50 p-2 rounded-xl'>
                 <form action={likeAction}>
-                    <button>
+                    <button className="transition-transform duration-200 hover:scale-120">
                         <Image
                             src={optimisticLike.isLiked ? "/liked.png" : "/like.png"}
                             alt=""

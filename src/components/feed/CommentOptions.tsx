@@ -29,6 +29,7 @@ const CommentOptions: React.FC<CommentOptionsProps> = ({
   // Close options when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
+      console.log("🚀 ~ handleClickOutside ~ optionsRef.current:", optionsRef.current)
       if (optionsRef.current && !optionsRef.current.contains(event.target as Node)) {
         setShowOptions(false);
       }
@@ -74,7 +75,7 @@ const CommentOptions: React.FC<CommentOptionsProps> = ({
         alt="Options"
         width={16}
         height={16}
-        className="w-4 h-4 cursor-pointer icon-primary hover:opacity-70"
+        className="w-4 h-4 cursor-pointer icon-primary hover:opacity-70 transition-transform duration-200 hover:scale-120"
         onClick={() => setShowOptions(!showOptions)}
       />
       

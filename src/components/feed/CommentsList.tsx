@@ -10,6 +10,7 @@ import { useUser } from '@clerk/nextjs'
 import { addComment } from '@/lib/actions'
 import dynamic from 'next/dynamic'
 import data from '@emoji-mart/data'
+import Avatar from '../avatar'
 
 type Props = {}
 // Option B: import the module––Next uses its default export
@@ -50,51 +51,45 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
         }
     )
 
-    // Recursive function to render nested replies
-    const renderReplies = (replies: CommentWithUser[], level: number = 0) => {
-        const maxLevel = 10; // Allow very deep nesting
-        if (level > maxLevel) return null;
+    // Function to flatten all replies into a linear list
+    const flattenReplies = (replies: CommentWithUser[]): CommentWithUser[] => {
+        let flatList: CommentWithUser[] = [];
         
-        return replies.map((reply) => (
-            <div key={reply.id} className={`mt-3 ${level === 0 ? 'ml-14' : 'ml-6'}`}>
+        const processReplies = (replyList: CommentWithUser[]) => {
+            replyList.forEach(reply => {
+                flatList.push(reply);
+                if (reply.replies && reply.replies.length > 0) {
+                    processReplies(reply.replies);
+                }
+            });
+        };
+        
+        processReplies(replies);
+        return flatList;
+    };
+
+    // Render all replies in a flat list beneath each other
+    const renderReplies = (replies: CommentWithUser[]) => {
+        const flatReplies = flattenReplies(replies);
+        
+        return flatReplies.map((reply) => (
+            <div key={reply.id} className="mt-3 ml-14">
                 <div className='flex gap-3'>
                     {/* Reply Avatar */}
-                    <Image 
+                    {/* <Image 
                         src={reply.user.avatar ?? '/noAvatar'} 
                         alt="" 
-                        className={`rounded-full object-cover icon-primary ${
-                            level === 0 ? 'w-8 h-8' : 
-                            level === 1 ? 'w-7 h-7' : 
-                            level === 2 ? 'w-6 h-6' :
-                            'w-5 h-5'
-                        }`} 
-                        width={
-                            level === 0 ? 32 : 
-                            level === 1 ? 28 : 
-                            level === 2 ? 24 :
-                            20
-                        } 
-                        height={
-                            level === 0 ? 32 : 
-                            level === 1 ? 28 : 
-                            level === 2 ? 24 :
-                            20
-                        } 
-                    />
+                        className="rounded-full object-cover w-8 h-8" 
+                        width={32} 
+                        height={32} 
+                    /> */}
+                    <Avatar userImageUrl={reply.user.avatar ?? '/noAvatar'} username={reply.user.username} size='sm' />
                     {/* Reply Content */}
                     <div className='flex flex-col gap-1 flex-1'>
-                        <span className={`font-medium ${
-                            level === 0 ? 'text-sm' : 
-                            level === 1 ? 'text-xs' : 
-                            'text-xs'
-                        }`}>
+                        <span className="font-medium text-sm">
                             {reply.user.username}
                         </span>
-                        <p className={`${
-                            level === 0 ? 'text-sm' : 
-                            level === 1 ? 'text-xs' : 
-                            'text-xs'
-                        }`}>
+                        <p className="text-sm">
                             {reply.content}
                         </p>
                         {/* Reply Interaction */}
@@ -116,20 +111,14 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                 
                 {/* Reply form for this reply */}
                 {activeReplyId === reply.id && user && (
-                    <div className={`mt-2 ${
-                        level === 0 ? 'ml-11' : 
-                        level === 1 ? 'ml-9' : 
-                        'ml-7'
-                    }`}>
+                    <div className="mt-2 ml-11">
                         <div className='flex items-center gap-2'>
                             <Image 
                                 src={user?.imageUrl} 
                                 alt="" 
-                                className={`rounded-full object-cover ${
-                                    level <= 2 ? 'w-6 h-6' : 'w-5 h-5'
-                                }`} 
-                                width={level <= 2 ? 24 : 20} 
-                                height={level <= 2 ? 24 : 20} 
+                                className="rounded-full object-cover w-6 h-6" 
+                                width={24} 
+                                height={24} 
                             />
                             <form onSubmit={(e) => {
                                 e.preventDefault()
@@ -151,7 +140,7 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                                         alt="Add emoji"
                                         width={16}
                                         height={16}
-                                        className="cursor-pointer"
+                                        className="cursor-pointer transition-transform duration-200 hover:scale-120"
                                         onClick={() => setShowReplyEmojiPicker(!showReplyEmojiPicker)}
                                     />
                                     {showReplyEmojiPicker && (
@@ -166,13 +155,6 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                                 </div>
                             </form>
                         </div>
-                    </div>
-                )}
-                
-                {/* Nested replies */}
-                {reply.replies && reply.replies.length > 0 && (
-                    <div className="space-y-2">
-                        {renderReplies(reply.replies, level + 1)}
                     </div>
                 )}
             </div>
@@ -326,8 +308,8 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
         <div >
             {/* addComment */}
             {user && <div className='flex items-center gap-4'>
-                <Image src={user?.imageUrl} alt="" className='w-8 h-8 rounded-full object-cover' width={32} height={32} />
-
+                {/* <Image src={user?.imageUrl} alt="" className='w-8 h-8 rounded-full object-cover' width={32} height={32} /> */}
+               
                 <form onSubmit={(e) => {
                     e.preventDefault()
                     add()
@@ -350,7 +332,7 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                             alt="Add emoji"
                             width={16}
                             height={16}
-                            className="cursor-pointer"
+                            className="cursor-pointer transition-transform duration-200 hover:scale-120"
                             onClick={() => setShowEmojiPicker(!showEmojiPicker)}
                         />
                         {showEmojiPicker && (
@@ -370,9 +352,10 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
             {user && optimisticComments.map((comment) => (
                 <div key={comment.id} className="mb-6">
                     {/* Main Comment */}
-                    <div className='flex gap-4 justify-between'>
+                    <div className='flex gap-4 justify-between pt-2'>
                         {/* Avatar */}
-                        <Image src={comment.user.avatar ?? '/noAvatar'} alt="" className='w-10 h-10 rounded-full object-cover icon-primary' width={40} height={40} />
+                        {/* <Image src={comment.user.avatar ?? '/noAvatar'} alt="" className='w-10 h-10 rounded-full object-cover' width={40} height={40} /> */}
+                         <Avatar userImageUrl={comment.user.avatar ??'/noAvatar' } username={comment.user.username} size='sm' />
                         {/* Content */}
                         <div className='flex flex-col gap-2 flex-1'>
                             <span className='font-medium'>{comment.user.username}</span>
@@ -399,6 +382,7 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                         <div className="ml-14 mt-3">
                             <div className='flex items-center gap-3'>
                                 <Image src={user?.imageUrl} alt="" className='w-8 h-8 rounded-full object-cover' width={32} height={32} />
+                                 
                                 <form onSubmit={(e) => {
                                     e.preventDefault()
                                     addReply(comment)
@@ -419,7 +403,7 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                                             alt="Add emoji"
                                             width={16}
                                             height={16}
-                                            className="cursor-pointer"
+                                            className="cursor-pointer transition-transform duration-200 hover:scale-120"
                                             onClick={() => setShowReplyEmojiPicker(!showReplyEmojiPicker)}
                                         />
                                         {showReplyEmojiPicker && (
@@ -437,7 +421,7 @@ const CommentsList = ({ comments, postId }: { comments: CommentWithUser[], postI
                         </div>
                     )}
 
-                    {/* Replies */}
+                    {/* Replies - all flattened beneath each other */}
                     {comment.replies && comment.replies.length > 0 && (
                         <div className="space-y-3">
                             {renderReplies(comment.replies)}

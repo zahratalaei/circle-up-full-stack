@@ -38,7 +38,7 @@ const ProfilePage = async ({params}: {params:{username:string} }) => {
           <div className="flex flex-col items-center justify-center">
             <div className='w-full h-64 relative'>
               <Image src={user?.cover || '/noCover.png'} alt="" fill className='object-cover rounded-sm' />
-              <Image src={user?.avatar || '/noAvatar.png'} alt="" width={128} height={128} className='absolute right-0 left-0 m-auto -bottom-16 w-32 h-32 object-cover rounded-full bor der-2 border-white shadow-md ring-4 ring-white z-10' />
+              <Image src={user?.avatar || '/noAvatar.png'} alt="" width={128} height={128} className='absolute right-0 left-0 m-auto -bottom-16 w-32 h-32 object-cover rounded-full border-2 border-white shadow-md ring-4 ring-white z-10' />
             </div>
             <h1 className='font-medium mt-20 mb-4 text-2xl'>{user?.name && user?.surname ? user.name+ ' '+ user.surname : user?.username }</h1>
             <div className='flex gap-12 items-center justify-center mb-4'>

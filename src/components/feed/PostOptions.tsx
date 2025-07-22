@@ -55,9 +55,9 @@ const PostOptions = ({ postId, authorId, currentDescription, currentImage }: Pos
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+          className="p-1 hover:bg-gray-100 rounded-full transition-colors transition-transform duration-200 hover:scale-105"
         >
-          <MoreHorizontal size={16} />
+          <MoreHorizontal size={16}  />
         </button>
         
         {isOpen && (

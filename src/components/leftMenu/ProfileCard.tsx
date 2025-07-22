@@ -39,7 +39,7 @@ const ProfileCard = async (props: Props) => {
                     <span className='text-gray-500 text-xs'>{user._count.followers} followers</span>
                 </div>
                 <Link href={`/profile/${user.username}`}>
-                    <button className='bg-primary text-white px-2 py-1 rounded-lg text-xs hover:bg-yellow-600 cursor-pointer'>My Profile</button>
+                    <button className='bg-primary text-white px-2 py-1 rounded-lg text-xs hover:bg-yellow-600 cursor-pointer transition-transform duration-200 hover:scale-105'>My Profile</button>
                 </Link>
             </div>
         </div>

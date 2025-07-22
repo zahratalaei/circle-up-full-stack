@@ -21,7 +21,7 @@ const Birthday = async (props: Props) => {
                         <span className='font-semibold'>User 22</span>
                     </div>
                     <div className='flex items-center gap-3 justify-end'>
-                        <button className='bg-primary text-white text-xs px-2 py-1 rounded-lg hover:bg-yellow-600'>Celebrate</button>
+                        <button className='bg-primary text-white text-xs px-2 py-1 rounded-lg hover:bg-yellow-600 transition-transform duration-200 hover:scale-105'>Celebrate</button>
                     </div>
                 </div>
             </div>

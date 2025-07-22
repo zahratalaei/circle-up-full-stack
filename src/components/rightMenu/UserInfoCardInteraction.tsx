@@ -62,7 +62,7 @@ const UserInfoCardInteraction = (props: Props) => {
                 <form action={followAction} className="w-full">
                     <button
                         disabled={optStatus.blockedBy}
-                        className='bg-primary rounded-xl w-full mb-2 py-2 text-white text-sm hover:bg-yellow-600'>
+                        className='bg-primary rounded-xl w-full mb-2 py-2 text-white text-sm hover:bg-yellow-600 transition-transform duration-200 hover:scale-105'>
                         {optStatus.blockedBy ? "You are Blocked" : labelMap[optStatus.status]}
                     </button>
                 </form>

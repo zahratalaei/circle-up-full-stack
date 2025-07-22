@@ -22,10 +22,10 @@ export default function RootLayout({
     <ClerkProvider>
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body className="bg-muted text-foreground font-sans">
-        <div className="w-full bg-background px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+        <div className="w-full bg-background px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 fixed top-0 left-0 right-0 z-50 shadow-sm">
           <Navbar/>
         </div>
-        <div className="bg-muted px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+        <div className="bg-muted px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 pt-16 md:pt-20">
           {children}
         </div>
       </body>

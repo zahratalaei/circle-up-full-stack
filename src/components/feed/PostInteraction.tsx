@@ -94,7 +94,7 @@ const PostInteraction = ({
             <div className="flex gap-8 text-yellow-700">
                 <div className="flex items-center gap-4 bg-slate-50 p-2 rounded-xl">
                     <form action={likeAction}>
-                        <button>
+                        <button className="transition-transform duration-200 hover:scale-120">
                             <Image
                                 src={isLiked ? "/liked.png" : "/like.png"}
                                 // src={optimisticLike.isLiked ? "/liked.png" : "/like.png"}
@@ -118,7 +118,7 @@ const PostInteraction = ({
                         alt=""
                         width={16}
                         height={16}
-                        className="cursor-pointer icon-primary"
+                        className="cursor-pointer icon-primary transition-transform duration-200 hover:scale-120"
                         onClick={() => onToggleComments && onToggleComments()}
                     />
                     {/* <MessageCircleMore  size={16} className="cursor-pointer icon-primary bg-muted" /> */}

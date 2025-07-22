@@ -14,13 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum RelationStatus {
-  NONE // no relationship  
-  REQUESTED // I’ve sent you a follow request  
-  FOLLOWING // I’m following you  
-  BLOCKED // either I’ve blocked you, or you’ve blocked me  
-}
-
 model User {
   id          String          @id @default(cuid())
   username    String?         @unique
@@ -40,16 +33,14 @@ model User {
   posts       Post[]
   likes       Like[]
   comments    Comment[]
-  followers   Follower[]      @relation("Follower")
-  following   Follower[]      @relation("Following")
+  followers   Follower[]      @relation("Following")
+  following   Follower[]      @relation("Follower")
   sender      FollowRequest[] @relation("Sender")
   receiver    FollowRequest[] @relation("Receiver")
   blocks      Block[]         @relation("Blocker")
   blockedBy   Block[]         @relation("Blocked")
   stories     Story[]
   events      Event[]
-  relations   Relationship[]  @relation("relations_from")
-  relatedBy   Relationship[]  @relation("relations_to")
   eventParticipations EventParticipation[]
 }
 
@@ -96,20 +87,6 @@ model Comment {
   parent      Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: Cascade)
   parentId    Int?
   replies     Comment[] @relation("CommentReplies")
-}
-
-model Relationship {
-  id     String @id @default(cuid())
-  from   User   @relation("relations_from", fields: [fromId], references: [id], onDelete: Cascade)
-  fromId String
-  to     User   @relation("relations_to", fields: [toId], references: [id], onDelete: Cascade)
-  toId   String
-
-  status    RelationStatus @default(NONE)
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @updatedAt
-
-  @@unique([fromId, toId])
 }
 
 model Follower {
