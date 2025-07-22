@@ -81,7 +81,7 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: pass123
+      MYSQL_ROOT_PASSWORD: ****
       MYSQL_DATABASE: circleup
     ports:
       - "3306:3306"
