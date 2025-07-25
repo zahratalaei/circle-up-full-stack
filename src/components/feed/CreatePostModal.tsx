@@ -1,13 +1,20 @@
 "use client";
 
 import Image from 'next/image'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { SendHorizontal, X } from 'lucide-react';
 import { addPost, addPostWithEvent } from '@/lib/actions';
 import { useUser } from '@clerk/nextjs';
 import { CldUploadWidget } from 'next-cloudinary';
 import AddEvent from './AddEvent';
 import Avatar from '../avatar';
+import dynamic from 'next/dynamic';
+import data from '@emoji-mart/data';
+
+// Dynamic import for emoji picker
+const Picker = dynamic(() => import("@emoji-mart/react"), {
+  ssr: false,
+});
 
 interface CreatePostModalProps {
   isOpen: boolean;
@@ -25,6 +32,11 @@ const CreatePostModal = ({ isOpen, onClose, initialMode = 'post' }: CreatePostMo
   const [isUploading, setIsUploading] = useState(false);
   const [showEventModal, setShowEventModal] = useState(initialMode === 'event');
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  
+  // Refs for emoji picker and textarea
+  const emojiPickerRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,18 +121,44 @@ const CreatePostModal = ({ isOpen, onClose, initialMode = 'post' }: CreatePostMo
     setSelectedEvent(null);
   };
 
+  const handleEmojiSelect = (emoji: any) => {
+    setDescription(prev => prev + emoji.native);
+    setShowEmojiPicker(false);
+    // Refocus the textarea after emoji selection
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
+  };
+
+  // Close emoji picker when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (emojiPickerRef.current && !emojiPickerRef.current.contains(event.target as Node)) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showEmojiPicker]);
+
   if (!isOpen || !user) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* Semi-transparent Backdrop */}
       <div 
-        className="absolute inset-0 backdrop-blur-[1px] bg-black/5" 
+        className="absolute inset-0 bg-black/30" 
         onClick={onClose}
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white rounded-lg shadow-2xl drop-shadow-2xl w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto border border-gray-200">
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
           <h2 className="text-xl font-semibold text-gray-800">
@@ -142,7 +180,6 @@ const CreatePostModal = ({ isOpen, onClose, initialMode = 'post' }: CreatePostMo
               userImageUrl={user.imageUrl} 
               username={user.username} 
               size="md"
-              clickable={false}
             />
             <div>
               <p className="font-medium text-gray-800">{user.username}</p>
@@ -151,17 +188,41 @@ const CreatePostModal = ({ isOpen, onClose, initialMode = 'post' }: CreatePostMo
           </div>
 
           {/* Text Input */}
-          <form onSubmit={handleSubmit}>
-            <textarea
-              placeholder="What's on your mind?"
-              className="w-full bg-transparent text-lg resize-none border-none outline-none placeholder-gray-400"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows={4}
-              disabled={isSubmitting}
-              autoFocus
-            />
-          </form>
+          <div className="relative">
+            <form onSubmit={handleSubmit}>
+              <textarea
+                ref={textareaRef}
+                placeholder="What's on your mind?"
+                className="w-full bg-transparent text-lg resize-none border-none outline-none placeholder-gray-400"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                disabled={isSubmitting}
+                autoFocus
+              />
+            </form>
+            
+            {/* Emoji Button */}
+            <div className="absolute bottom-2 right-2" ref={emojiPickerRef}>
+              <Image
+                src="/emoji.png"
+                alt="Add emoji"
+                width={20}
+                height={20}
+                className="cursor-pointer transition-transform duration-200 hover:scale-110"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              />
+              {showEmojiPicker && (
+                <div className="absolute bottom-8 right-0 z-50">
+                  <Picker 
+                    data={data}
+                    onEmojiSelect={handleEmojiSelect}
+                    theme="light"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
 
           {/* Image/Video Preview */}
           {selectedImage && (

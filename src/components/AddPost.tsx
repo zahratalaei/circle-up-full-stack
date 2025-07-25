@@ -5,10 +5,12 @@ import React, { useState } from 'react'
 import { useUser } from '@clerk/nextjs';
 import Avatar from './avatar';
 import CreatePostModal from './feed/CreatePostModal';
+import AddEvent from './feed/AddEvent';
 
 const AddPost = () => {
     const { user } = useUser();
     const [showModal, setShowModal] = useState(false);
+    const [showEventModal, setShowEventModal] = useState(false);
     const [modalMode, setModalMode] = useState<'post' | 'event'>('post');
 
     const openModal = (mode: 'post' | 'event' = 'post') => {
@@ -18,6 +20,19 @@ const AddPost = () => {
 
     const closeModal = () => {
         setShowModal(false);
+    };
+
+    const openEventModal = () => {
+        setShowEventModal(true);
+    };
+
+    const closeEventModal = () => {
+        setShowEventModal(false);
+    };
+
+    const handleEventCreated = (event: any) => {
+        // Handle event creation if needed
+        setShowEventModal(false);
     };
 
     if (!user) {
@@ -32,7 +47,6 @@ const AddPost = () => {
                     userImageUrl={user.imageUrl} 
                     username={user.username} 
                     size="lg"
-                    clickable={false}
                 />
                 
                 {/* Post Trigger */}
@@ -65,7 +79,7 @@ const AddPost = () => {
                             </button>
 
                             <button
-                                onClick={() => openModal('event')}
+                                onClick={openEventModal}
                                 className='flex items-center gap-2 hover:bg-gray-100 px-3 py-2 rounded-lg transition-colors'
                             >
                                 <Image src="/addEvent.png" alt="" width={20} height={20} />
@@ -90,6 +104,14 @@ const AddPost = () => {
                 onClose={closeModal}
                 initialMode={modalMode}
             />
+
+            {/* Event Modal */}
+            {showEventModal && (
+                <AddEvent
+                    onClose={closeEventModal}
+                    onEventCreated={handleEventCreated}
+                />
+            )}
         </>
     )
 }
